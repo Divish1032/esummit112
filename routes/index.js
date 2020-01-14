@@ -60,17 +60,17 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
               }
             });
           });
-          EventRegister.find({ student_id : req.user.email, payment : false}, (err3, result3) =>{
+          EventRegister.find({ student_id : req.user.email}, (err3, result3) =>{
             if(err3)res.send("Error")
             else{
-              arr2=[]
+              arr2=[];
                 result3.forEach(u => {
-                  if(u.name == "E-Carnival" && req.user.startup == true){
+                  if(u.name == "E-Carnival" && req.user.startup == true && u.payment == false){
                     total_amount = total_amount + 2499;
                     arr2.push({price : 2499, data : u})
                   }                  
                 });
-                res.render('payment', {user: req.user, workshop : arr, startupEvents : arr2, amount : total_amount});
+                res.render('payment', {user: req.user, workshop : arr, startupEvents : arr2, events: result3, amount : total_amount});
               
             }
           })
@@ -101,18 +101,18 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
               }
             });
           });
-          EventRegister.find({ student_id : req.user.email, payment : false}, (err3, result3) =>{
+          EventRegister.find({ student_id : req.user.email}, (err3, result3) =>{
             if(err3)res.send("Error")
             else{
               arr2=[]
                 result3.forEach(u => {
-                  if(u.name == "E-Carnival" && req.user.startup == true){
+                  if(u.name == "E-Carnival" && req.user.startup == true && u.payment == false){
                     total_amount = total_amount + 2499;
                     arr2.push({price : 2499, data : u})
                   }
                 });
                 var data = new Insta.PaymentData();
-                if(req.user.registration == false){
+                if((req.user.registration == false && result3.length!=0) || (req.user.registration == false && result.length==0)){
                   total_amount = total_amount + 999;
                 }
                 if(total_amount == 0){
@@ -150,7 +150,6 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
                         }
                         else{
                           req.flash('error_msg', "Error Occured");
-                          console.log(response);
                           res.redirect('/payment');
                         }
                       }
@@ -158,7 +157,6 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
                         User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.acc}}, (err10, result10)=>{
                           if(err10)res.send(err10);
                           else{
-                            console.log(result10)
                             res.redirect(response.payment_request.longurl)
                           }
                         })
@@ -523,40 +521,9 @@ router.get('/dashboard/discard-event/:team_name/:name', middleware.ensureAuthent
 
 // Test Routes
 
-/* router.get('/4554545', (req, res) =>{
-  var arr =[];
-  User.find({}, (err, re) =>{
-   var i =0;
-   var l = re.length;
-    re.forEach(x => {
-      if(re.referal_code){
-        console.log({id : re._id, referal_code : re.referal_code})
-        arr.push({id : re._id, referal_code : re.referal_code});
-      }
-      if(i==l-1){
-        res.send(arr)
-      }
-      i++;
-    });
-    
-  });
-  
-}) */
-
-/* router.post('/event-post', (req, res) => {
-  var name = req.body.name;
-  var newEvent = new Event({name, startup: false, student : true});
-  newEvent.save().then(newWorkshop => {
-    req.flash('success_msg','You have created a workshop');
-    res.redirect('/tab');
-    });
-}); */
-
 router.get("/tab",  function(req, res) {
 
-  User.updateMany({},{$set:{accomodation: null, type: null}}).then(rest=>{
-    console.log("=")
-  })
+  res.render('tab')
 })
 
 router.get('/ada4545454fe6er6f5ef6f5e', (req, res) => {
@@ -583,6 +550,14 @@ async function getAThing(eid, x) {
     }
   });
 }
+
+router.post('/payment-true45454565923dew', (req, res) => {
+  User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{ registration : true, accomodation: "yes"}}, (err, result) =>{
+    EventRegister.updateMany({email: result.email, payment: false} ,{$set:{payment : true}}, (err3, event3) => { 
+      res.render("tab")
+  });
+})
+});
 
 // Authentication
 

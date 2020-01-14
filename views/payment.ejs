@@ -228,41 +228,43 @@
                       
                         <% if(user.startup == false){ %>
                         <form action="/payment" method="post">
+                        <% if(events.length != 0 || workshop.length==0){ %>
                           <% if(user.registration == false){ %>
-                          <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 16th Jan'20) </h5>
-                          <div class="row" style="    width: 80%;margin: 25px auto;">
-                            <div class="col-sm-4">
-                                <label style="position: relative;                                top: 2px;">Registration + Accomodation</label>
+                            <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 16th Jan'20) </h5>
+                            <div class="row" style="    width: 80%;margin: 25px auto;">
+                              <div class="col-sm-4">
+                                  <label style="position: relative;                                top: 2px;">Registration + Accomodation</label>
+                              </div>
+                              <div class="col-sm-8">
+                                      <div class="form-check" style="    width: 50%;float: left;">
+                                              <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios1" value="yes" required>
+                                              <label class="form-check-label" for="exampleRadios1">
+                                                Yes
+                                              </label>
+                                              <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999 - Early Bird!!</small>
+                                            </div>
+                                            <div class="form-check" style="    width: 50%;float: left;">
+                                              <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios2" value="no" required>
+                                              <label class="form-check-label" for="exampleRadios2">
+                                                No (Only registration)
+                                              </label>
+                                              <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999</small>
+                                            </div>
+                              </div>   
                             </div>
-                            <div class="col-sm-8">
-                                    <div class="form-check" style="    width: 50%;float: left;">
-                                            <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios1" value="yes" required>
-                                            <label class="form-check-label" for="exampleRadios1">
-                                              Yes
-                                            </label>
-                                            <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999 - Early Bird!!</small>
-                                          </div>
-                                          <div class="form-check" style="    width: 50%;float: left;">
-                                            <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios2" value="no" required>
-                                            <label class="form-check-label" for="exampleRadios2">
-                                              No (Only registration)
-                                            </label>
-                                            <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999</small>
-                                          </div>
-                            </div>   
-                        </div>
-                        <% }else{ %>
-                          <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Student Registration Done.</h5>
+                          <% }else{ %>
+                            <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Student Registration Done.</h5>
+                          <% } %>
+                            <div class="row" style="font-size: 19px;"> 
+                              
+                              <div class="col-6">
+                                <p style="color: #AAA;">Student Events are free after registration :</p>
+                              </div>
+                              <div class="col-6" style="position: relative;left: 20px;font-size: 15px;">
+                                <p>Rs. 0</p>
+                              </div>
+                            </div>
                         <% } %>
-                        <div class="row" style="font-size: 19px;"> 
-                          
-                          <div class="col-6">
-                            <p style="color: #AAA;">Student Events are free after registration :</p>
-                          </div>
-                          <div class="col-6" style="position: relative;left: 20px;font-size: 15px;">
-                            <p>Rs. 0</p>
-                          </div>
-                        </div>
                         <div >
                          <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Registered Workshops : </h5> 
                           
@@ -296,7 +298,7 @@
                             
                             <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
                               Rs. <span class="tt">
-                              <% if(user.registration == false){ %> 
+                              <% if((user.registration == false && events.length!=0) || (user.registration == false && workshop.length==0)){ %> 
                               <%= amount + 999 %>
                               <% }else{ %>
                                 <%= amount %>
