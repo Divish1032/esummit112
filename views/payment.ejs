@@ -228,7 +228,7 @@
                       
                         <% if(user.startup == false){ %>
                         <form action="/payment" method="post">
-                          <% if(events.length !=0){ %>
+                          <% if(events.length !=0 || (workshop.length == 0 && events.length == 0)){ %>
                             <% if(user.registration == false){ %>
                               <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 16th Jan'20) </h5>
                               <div class="row" style="    width: 80%;margin: 25px auto;">

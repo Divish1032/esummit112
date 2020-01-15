@@ -66,7 +66,7 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
             }
           }
         });
-        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) ){
+        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
           total_amount = total_amount + 999;
         }
         res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival});
@@ -98,7 +98,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
             }
           }
         });
-        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) ){
+        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0) ){
           total_amount = total_amount + 999;
         }
         if(total_amount == 0){
@@ -326,7 +326,7 @@ router.post('/dashboard/event', middleware.ensureAuthenticated , (req,res) => {
     newEventRegister.save().then(newEvent => {
       req.flash('success_msg','You have registered this event');
       res.redirect('/dashboard-participate');
-      })
+      });
   });
 });
 
