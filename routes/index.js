@@ -40,138 +40,119 @@ router.get('/', (req,res) => {
 
 
 // Payment
-
 router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
+  
   var total_amount = 0;
-  WorkshopRegister.find({email : req.user.email, payment : false}, (err, result) => {
+  WorkshopRegister.find({email : req.user.email, payment : false}, (err, workshop) => {
     if(err){
       res.send("Error")
     }
     else{
-      Workshop.find({}, (err2, result2) => {
-        if(err2){res.send("Error")}
-        else{
-          arr =[]
-          result.forEach(t => {
-            result2.forEach(y => {
-              if(t.workshop_id == y._id){
-                total_amount = total_amount + y.price;
-                arr.push({price : y.price, data : t})
-              }
-            });
-          });
-          EventRegister.find({ student_id : req.user.email}, (err3, result3) =>{
-            if(err3)res.send("Error")
-            else{
-              arr2=[];
-                result3.forEach(u => {
-                  if(u.name == "E-Carnival" && req.user.startup == true && u.payment == false){
-                    total_amount = total_amount + 2499;
-                    arr2.push({price : 2499, data : u})
-                  }                  
-                });
-                res.render('payment', {user: req.user, workshop : arr, startupEvents : arr2, events: result3, amount : total_amount});
-              
+      var eventECarnival = false;
+      EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
+        events.forEach(x=> {
+          if(req.user.startup == true && x.name == "E-Carnival"){
+            eventECarnival = true;
+            total_amount = total_amount + 2499;
+          }
+        });
+        workshop.forEach(x=>{
+          if(x.workshop_id == "5dfd36336dea263d7cec0444"){
+            total_amount = total_amount + 7499;
+          }
+          if(events.length == 0){
+            if(x.workshop_id != "5dfd36336dea263d7cec0444"){
+              total_amount = total_amount + 999;
             }
-          })
+          }
+        });
+        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) ){
+          total_amount = total_amount + 999;
         }
+        res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival});
       })
-      
     }
   })
 })
 
 router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
   var total_amount = 0;
-  
-  WorkshopRegister.find({email : req.user.email, payment : false}, (err, result) => {
+  WorkshopRegister.find({email : req.user.email, payment : false}, (err, workshop) => {
     if(err){
       res.send("Error")
     }
     else{
-      Workshop.find({}, (err2, result2) => {
-        if(err2){res.send("Error")}
+      EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
+        events.forEach(x=> {
+          if(req.user.startup == true && x.name == "E-Carnival"){
+            total_amount = total_amount + 2499;
+          }
+        });
+        workshop.forEach(x=>{
+          if(x.workshop_id == "5dfd36336dea263d7cec0444"){
+            total_amount = total_amount + 7499;
+          }
+          if(events.length == 0){
+            if(x.workshop_id != "5dfd36336dea263d7cec0444"){
+              total_amount = total_amount + 999;
+            }
+          }
+        });
+        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) ){
+          total_amount = total_amount + 999;
+        }
+        if(total_amount == 0){
+          req.flash('error_msg', "Payment coult not be zero.");
+          res.redirect('/payment');
+        }
         else{
-          arr =[]
-          result.forEach(t => {
-            result2.forEach(y => {
-              if(t.workshop_id == y._id){
-                total_amount = total_amount + y.price;
-                arr.push({price : y.price, data : t})
-              }
-            });
-          });
-          EventRegister.find({ student_id : req.user.email}, (err3, result3) =>{
-            if(err3)res.send("Error")
-            else{
-              arr2=[]
-                result3.forEach(u => {
-                  if(u.name == "E-Carnival" && req.user.startup == true && u.payment == false){
-                    total_amount = total_amount + 2499;
-                    arr2.push({price : 2499, data : u})
-                  }
-                });
-                var data = new Insta.PaymentData();
-                if((req.user.registration == false && result3.length!=0) || (req.user.registration == false && result.length==0)){
-                  total_amount = total_amount + 999;
+          var data = new Insta.PaymentData();
+          data.purpose = "E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
+          data.amount = total_amount;
+          data.currency                = 'INR';
+          data.buyer_name              = req.user.first_name;
+          data.email                   = req.user.email;
+          data.phone                   = req.user.phone;
+          data.webhook                 = 'https://esummitiitbhu.com/payment-webhook-14567899'
+          data.send_sms                = 'True';
+          data.send_email              = 'True';
+          data.allow_repeated_payments = 'False';                  
+          data.setRedirectUrl('https://esummitiitbhu.com/pay789456');
+           
+          Insta.createPayment(data, function(error, response) {
+            if (error) {
+              // some error
+            } else {
+              response = JSON.parse(response);
+              // Payment redirection link at response.payment_request.longurl
+              if(response.success == false){
+                if(response.message.phone){
+                  req.flash('error_msg', response.message.phone[0]);
+                  res.redirect('/payment');
                 }
-                if(total_amount == 0){
-                  req.flash('error_msg','You cannot pay a zero amount');
-                  res.redirect('/payment')
+                else if(response.message.email){
+                  req.flash('error_msg', response.message.email[0]);
+                  res.redirect('/payment');
                 }
                 else{
-                  
-                  data.purpose = "E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
-                  data.amount = total_amount;
-                  data.currency                = 'INR';
-                  data.buyer_name              = req.user.first_name;
-                  data.email                   = req.user.email;
-                  data.phone                   = req.user.phone;
-                  data.webhook                 = 'https://esummitiitbhu.com/payment-webhook-14567899'
-                  data.send_sms                = 'True';
-                  data.send_email              = 'True';
-                  data.allow_repeated_payments = 'False';                  
-                  data.setRedirectUrl('https://esummitiitbhu.com/pay789456');
-                   
-                  Insta.createPayment(data, function(error, response) {
-                    if (error) {
-                      // some error
-                    } else {
-                      response = JSON.parse(response);
-                      // Payment redirection link at response.payment_request.longurl
-                      if(response.success == false){
-                        if(response.message.phone){
-                          req.flash('error_msg', response.message.phone[0]);
-                          res.redirect('/payment');
-                        }
-                        else if(response.message.email){
-                          req.flash('error_msg', response.message.email[0]);
-                          res.redirect('/payment');
-                        }
-                        else{
-                          req.flash('error_msg', "Error Occured");
-                          res.redirect('/payment');
-                        }
-                      }
-                      else{                        
-                        User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.acc}}, (err10, result10)=>{
-                          if(err10)res.send(err10);
-                          else{
-                            res.redirect(response.payment_request.longurl)
-                          }
-                        })
-                      }
-                    }
-                  });
+                  req.flash('error_msg', "Error Occured");
+                  res.redirect('/payment');
                 }
+              }
+              else{                        
+                User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.acc}}, (err10, result10)=>{
+                  if(err10)res.send(err10);
+                  else{
+                    res.redirect(response.payment_request.longurl)
+                  }
+                })
+              }
             }
-          })
+          });
         }
-      })
-      
+      });
     }
-  })
-
+  });
 });
 
 router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
@@ -198,7 +179,6 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                     res.redirect('/dashboard-participate');
                   }
                 })
-                
               }
             });
           }
@@ -217,7 +197,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
       }
     });
   }
-})
+});
 
 router.post('/payment-webhook-14567899', (req, res) => {
   var email = req.body.buyer;
@@ -347,7 +327,7 @@ router.post('/dashboard/event', middleware.ensureAuthenticated , (req,res) => {
       req.flash('success_msg','You have registered this event');
       res.redirect('/dashboard-participate');
       })
-  })
+  });
 });
 
 router.post('/dashboard/workshop', middleware.ensureAuthenticated , (req,res) => {
@@ -362,7 +342,8 @@ router.post('/dashboard/workshop', middleware.ensureAuthenticated , (req,res) =>
         if(er)res.send("Error");
         else{
           workshop_name = rr.name;
-          var newWorkshopRegister = new WorkshopRegister({ workshop_id, workshop_name, name, email});
+          var payment = (req.user.registration && workshop_id != "5dfd36336dea263d7cec0444" && !req.user.startup) ? true : false; 
+          var newWorkshopRegister = new WorkshopRegister({ workshop_id, workshop_name, name, email, payment});
           newWorkshopRegister.save().then(newWorkshopRegister => {
             req.flash('success_msg','You have registered this workshop');
             res.redirect('/dashboard-participate#workshop');

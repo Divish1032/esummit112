@@ -228,33 +228,33 @@
                       
                         <% if(user.startup == false){ %>
                         <form action="/payment" method="post">
-                        <% if(events.length != 0 || workshop.length==0){ %>
-                          <% if(user.registration == false){ %>
-                            <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 16th Jan'20) </h5>
-                            <div class="row" style="    width: 80%;margin: 25px auto;">
-                              <div class="col-sm-4">
-                                  <label style="position: relative;                                top: 2px;">Registration + Accomodation</label>
+                          <% if(events.length !=0){ %>
+                            <% if(user.registration == false){ %>
+                              <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 16th Jan'20) </h5>
+                              <div class="row" style="    width: 80%;margin: 25px auto;">
+                                <div class="col-sm-4">
+                                    <label style="position: relative;top: 2px;">Registration + Accomodation</label>
+                                </div>
+                                <div class="col-sm-8">
+                                        <div class="form-check" style="    width: 50%;float: left;">
+                                                <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios1" value="yes" required>
+                                                <label class="form-check-label" for="exampleRadios1">
+                                                  Yes
+                                                </label>
+                                                <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999 - Early Bird!!</small>
+                                              </div>
+                                              <div class="form-check" style="    width: 50%;float: left;">
+                                                <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios2" value="no" required>
+                                                <label class="form-check-label" for="exampleRadios2">
+                                                  No (Only registration)
+                                                </label>
+                                                <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999</small>
+                                              </div>
+                                </div>   
                               </div>
-                              <div class="col-sm-8">
-                                      <div class="form-check" style="    width: 50%;float: left;">
-                                              <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios1" value="yes" required>
-                                              <label class="form-check-label" for="exampleRadios1">
-                                                Yes
-                                              </label>
-                                              <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999 - Early Bird!!</small>
-                                            </div>
-                                            <div class="form-check" style="    width: 50%;float: left;">
-                                              <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios2" value="no" required>
-                                              <label class="form-check-label" for="exampleRadios2">
-                                                No (Only registration)
-                                              </label>
-                                              <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999</small>
-                                            </div>
-                              </div>   
-                            </div>
-                          <% }else{ %>
-                            <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Student Registration Done.</h5>
-                          <% } %>
+                            <% }else{ %>
+                              <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Student Registration Done.</h5>
+                            <% } %>
                             <div class="row" style="font-size: 19px;"> 
                               
                               <div class="col-6">
@@ -264,52 +264,62 @@
                                 <p>Rs. 0</p>
                               </div>
                             </div>
-                        <% } %>
-                        <div >
-                         <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Registered Workshops : </h5> 
-                          
-                          <% if(workshop.length != 0){ %>
-                            <% workshop.forEach(t => { %>
-                              <div class="row" style="margin-left: 20px;">
-                                <div class="col-6">
-                                  <p><%= t.data.workshop_name %></p>
-                                </div>
-                                <div class="col-6">
-                                  <p>Rs. <%= t.price %></p>
-                                </div>
-                              </div>
-                               
-                            <% }) %>
-                          <% }else{ %>
-                            <div class="row"  style="margin-left: 20px;">
-                              <div class="col-12"><p>No new workshop added for payment. Please first make you team.</p></div>
-                              
-                            </div>
-                            
                           <% } %>
-                        </div>
-
-                        <hr style="background-color: white;width: 75%;margin: 17px 0;">
-                        <div class="row" style="font-size: 19px;color: #AAA;">
-                          <div class="col-6">
-                            <p>Total : </p>
-                          </div>
-                          <div class="col-6">
-                            
-                            <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                              Rs. <span class="tt">
-                              <% if((user.registration == false && events.length!=0) || (user.registration == false && workshop.length==0)){ %> 
-                              <%= amount + 999 %>
+                          <div>
+                          <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Registered Workshops : </h5> 
+                            <% if(workshop.length != 0){ %>
+                              <% if(events.length == 0){ %>
+                                <% workshop.forEach(x => { %>
+                                  <div class="row" style="margin-left: 20px;">
+                                    <div class="col-6">
+                                      <p><%= x.workshop_name %></p>
+                                    </div>
+                                    <div class="col-6">
+                                      <% if(x.workshop_id == "5dfd36336dea263d7cec0444"){ %>
+                                      <p>Rs. 7499</p>
+                                      <% }else{ %>
+                                      <p>Rs. 999</p>
+                                      <% } %>
+                                    </div>
+                                  </div>                             
+                                <% }) %>
                               <% }else{ %>
-                                <%= amount %>
-                                <% } %>
-                              </span>
-                            </p>
+                                <% workshop.forEach(x => { %>
+                                  <div class="row" style="margin-left: 20px;">
+                                    <div class="col-6">
+                                      <p><%= x.workshop_name %></p>
+                                    </div>
+                                    <div class="col-6">
+                                      <% if(x.workshop_id == "5dfd36336dea263d7cec0444"){ %>
+                                      <p>Rs. 7499</p>
+                                      <% }else{ %>
+                                      <p>Rs. 0</p>
+                                      <% } %>
+                                    </div>
+                                  </div>  
+                                <% }) %>
+                              <% } %>
+                            <% }else{ %>
+                              <div class="row"  style="margin-left: 20px;">
+                                <div class="col-12"><p>No new workshop added for payment. Please first make you team.</p></div>
+                              </div>
+                            <% } %>
                           </div>
-                        </div>
-                        <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
+                          <hr style="background-color: white;width: 75%;margin: 17px 0;">
+                          <div class="row" style="font-size: 19px;color: #AAA;">
+                            <div class="col-6">
+                              <p>Total : </p>
+                            </div>
+                            <div class="col-6">
+                              <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
+                                Rs. <span class="tt"><%= amount %></span>
+                              </p>
+                            </div>
+                          </div>
+                          <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
                         </form>
                         <% } %>
+                        
                         <% if(user.startup == true){ %>
                           <form action="/payment" method="post">
                             <% if(user.registration == false){ %>
@@ -317,7 +327,6 @@
                                 <div class="col-6" ><h5>Professional Registration Fee</h5></div>
                                 <div class="col-6"><span>Rs. 999 <small style="margin-left: 10px;color: #0cf9b6;">Early Bird Offer!!! (till 16th Jan'20)</small></span></div>
                               </div>
-                               
                               <div class="row" style="width: 80%;margin: 25px auto;">
                                 <div class="col-12">
                                   <div class="row">
@@ -347,31 +356,25 @@
                                    
                                 </div>
                                 
-                            </div>
-                          <% }else{ %>
+                              </div>
+                            <% }else{ %>
                             <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Professional Registration Done.</h5>
-                          <% } %>
-                          
+                            <% } %>
                           <div >
-                           <h5 style="margin: 10px 0px;font-size: 19px;color: #AAA;">Registered Startup Events : </h5> 
-                            
-                            <% if(startupEvents.length != 0){ %>
-                              <% startupEvents.forEach(u => { %>
-                                <div class="row" style="margin-left: 20px;">
-                                  <div class="col-6">
-                                    <p><%= u.data.name %></p>
-                                  </div>
-                                  <div class="col-6">
-                                    <p>Rs. <%= u.price %></p>
-                                  </div>
+                           <h5 style="margin: 10px 0px;font-size: 19px;color: #AAA;">Paid Startup Event : </h5> 
+                            <% if(eventECarnival){ %>
+                              <div class="row" style="margin-left: 20px;">
+                                <div class="col-6">
+                                  <p>E-Carnival</p>
                                 </div>
-                              <% }) %>
+                                <div class="col-6">
+                                  <p>Rs. 2499</p>
+                                </div>
+                              </div>
                             <% }else{ %>
                               <div class="row"  style="margin-left: 20px;">
-                                <div class="col-12"><p>No new event added for payment. Please first make your team.</p></div>
-                                
+                                <div class="col-12"><p>No new event added for payment.</p></div>
                               </div>
-                              
                             <% } %>
                           </div>
                           <hr style="background-color: white;width: 75%;margin: 17px 0;">
@@ -381,19 +384,12 @@
                             </div>
                             <div class="col-6">
                               <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                                Rs. <span class="tt">
-                                <% if(user.registration == false){ %> 
-                                <%= amount + 999 %>
-                                <% }else{ %>
-                                  <%= amount %>
-                                  <% } %>
-                                </span>
+                                Rs. <span class="tt"><%= amount %></span>
                               </p>
                             </div>
                           </div>
                           <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
                           </form>
-                          
                         <% } %>
                     </div>
                 </div>
