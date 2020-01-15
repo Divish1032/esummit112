@@ -102,7 +102,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
           total_amount = total_amount + 999;
         }
         if(total_amount == 0){
-          req.flash('error_msg', "Payment coult not be zero.");
+          req.flash('error_msg', "Payment could not be zero.");
           res.redirect('/payment');
         }
         else{
@@ -499,46 +499,6 @@ router.get('/dashboard/discard-event/:team_name/:name', middleware.ensureAuthent
   })
 });
 
-
-// Test Routes
-
-router.get("/tab",  function(req, res) {
-
-  res.render('tab')
-})
-
-router.get('/ada4545454fe6er6f5ef6f5e', (req, res) => {
-  User.find({}, (err, result) => {
-    if(err)res.send(err);
-    else{
-      var i = 3456
-      result.forEach(x => {
-        var eid = "ES-"+ i;
-        getAThing(eid, x);
-        i++;
-      });
-    }
-    res.send("Success")
-  })
-    
-});
-async function getAThing(eid, x) {
-  await User.findOneAndUpdate({email : x.email} ,{$set:{esummit_id : eid}}, (err3, event3) => { 
-    if(err3){
-      console.log(err3)
-    }else{
-      console.log("-")
-    }
-  });
-}
-
-router.post('/payment-true45454565923dew', (req, res) => {
-  User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{ registration : true, accomodation: "yes"}}, (err, result) =>{
-    EventRegister.updateMany({email: result.email, payment: false} ,{$set:{payment : true}}, (err3, event3) => { 
-      res.render("tab")
-  });
-})
-});
 
 // Authentication
 

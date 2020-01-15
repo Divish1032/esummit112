@@ -49,10 +49,11 @@ app.use(function(req, res, next) {
 });
 
 var index = require("./routes/index")
+var test = require('./routes/apiTest');
 
 // Routes
 app.use('/', index);
-
+app.use('/test', test);
 const PORT = process.env.PORT || 9000;
 
 app.listen(PORT, function(){
