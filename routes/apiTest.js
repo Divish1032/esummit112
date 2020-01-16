@@ -66,7 +66,7 @@ router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
                     });
                     workshopPayment.forEach(z => {
                         if( x.email == z.email){
-                            arr2.push(y.name);
+                            arr2.push(z.workshop_name);
                         }
                     });
                     result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, city : x.city, email : x.email, college : x.college, startup : x.startup, accomodation : x.accomodation, events : arr1, workshops : arr2});
@@ -75,5 +75,33 @@ router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
             })
         })
     })
-})
+});
+
+router.get('/user-historygrtja45rhwe5/g5g4erg5egg545eg4njtj', (req, res) => {
+    User.find({}, (err, payment) => {
+        EventRegister.find({}, ( err2, eventPayment) => {
+            WorkshopRegister.find({}, (err3, workshopPayment) => {
+                var result = [];
+                payment.forEach(x => {
+                    var arr1 = [];
+                    var arr2 = [];
+                    eventPayment.forEach(y => {
+                        if( x.email == y.student_id){
+                            arr1.push(y.name);
+                        }
+                    });
+                    workshopPayment.forEach(z => {
+                        if( x.email == z.email){
+                            arr2.push(z.workshop_name);
+                        }
+                    });
+                    result.push({ ESummit_ID : x.esummit_id, registration : x.registration, name : x.first_name + " " + x.last_name, phone : x.phone, city : x.city, email : x.email, college : x.college, startup : x.startup, accomodation : x.accomodation, events : arr1, workshops : arr2});
+                });
+                res.send(result);
+            })
+        })
+    })
+});
+
+
   module.exports = router;
