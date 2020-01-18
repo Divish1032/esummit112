@@ -6,6 +6,7 @@ var Workshop = require("../models/workshop");
 var EventRegister = require("../models/eventRegister");
 var WorkshopRegister = require("../models/workshopRegister");
 var paymentDetail = require("../models/paymentDetail");
+var visitorPass = require("../models/visitorsPass")
 var webhook = require("../models/webhook")
 var middleware = require('../config');
 var passport = require("passport");
@@ -15,6 +16,7 @@ const keys = require('../security/keys');
 const refer = require('../security/refer');
 var async = require("async");
 var crypto = require("crypto");
+var request=require('request');
 
 
 var Insta = require('instamojo-nodejs');
@@ -69,90 +71,131 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
         if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
           total_amount = total_amount + 999;
         }
-        res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival});
+        res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival, type: req.query.type});
       })
     }
   })
 })
 
 router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
-  var total_amount = 0;
-  WorkshopRegister.find({email : req.user.email, payment : false}, (err, workshop) => {
-    if(err){
-      res.send("Error")
-    }
-    else{
-      EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
-        events.forEach(x=> {
-          if(req.user.startup == true && x.name == "E-Carnival"){
-            total_amount = total_amount + 2499;
+  if(req.query.type== "pass"){
+    var data = new Insta.PaymentData();
+    data.purpose = "Visitor's Pass E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
+    data.amount = 499;
+    data.currency                = 'INR';
+    data.buyer_name              = req.user.first_name;
+    data.email                   = req.user.email;
+    data.phone                   = req.user.phone;
+    data.send_sms                = 'True';
+    data.send_email              = 'True';
+    data.allow_repeated_payments = 'False';                  
+    data.setRedirectUrl('https://esummitiitbhu.com/visitorpay789456');
+    Insta.createPayment(data, function(error, response) {
+      if (error) {
+        // some error
+      } else {
+        response = JSON.parse(response);
+        // Payment redirection link at response.payment_request.longurl
+        if(response.success == false){
+          if(response.message.phone){
+            req.flash('error_msg', response.message.phone[0]);
+            res.redirect('/payment?type=payment');
           }
-        });
-        workshop.forEach(x=>{
-          if(x.workshop_id == "5dfd36336dea263d7cec0444"){
-            total_amount = total_amount + 7499;
+          else if(response.message.email){
+            req.flash('error_msg', response.message.email[0]);
+            res.redirect('/payment?type=payment');
           }
-          if(events.length == 0){
-            if(x.workshop_id != "5dfd36336dea263d7cec0444"){
-              total_amount = total_amount + 999;
+          else{
+            req.flash('error_msg', "Error Occured");
+            res.redirect('/payment?type=payment');
+          }
+        }
+        else{                        
+          res.redirect(response.payment_request.longurl)
+        }
+      }
+    });
+  }
+  else{
+    var total_amount = 0;
+    WorkshopRegister.find({email : req.user.email, payment : false}, (err, workshop) => {
+      if(err){
+        res.send("Error")
+      }
+      else{
+        EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
+          events.forEach(x=> {
+            if(req.user.startup == true && x.name == "E-Carnival"){
+              total_amount = total_amount + 2499;
             }
-          }
-        });
-        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0) ){
-          total_amount = total_amount + 999;
-        }
-        if(total_amount == 0){
-          req.flash('error_msg', "Payment could not be zero.");
-          res.redirect('/payment');
-        }
-        else{
-          var data = new Insta.PaymentData();
-          data.purpose = "E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
-          data.amount = total_amount;
-          data.currency                = 'INR';
-          data.buyer_name              = req.user.first_name;
-          data.email                   = req.user.email;
-          data.phone                   = req.user.phone;
-          data.webhook                 = 'https://esummitiitbhu.com/payment-webhook-14567899'
-          data.send_sms                = 'True';
-          data.send_email              = 'True';
-          data.allow_repeated_payments = 'False';                  
-          data.setRedirectUrl('https://esummitiitbhu.com/pay789456');
-           
-          Insta.createPayment(data, function(error, response) {
-            if (error) {
-              // some error
-            } else {
-              response = JSON.parse(response);
-              // Payment redirection link at response.payment_request.longurl
-              if(response.success == false){
-                if(response.message.phone){
-                  req.flash('error_msg', response.message.phone[0]);
-                  res.redirect('/payment');
-                }
-                else if(response.message.email){
-                  req.flash('error_msg', response.message.email[0]);
-                  res.redirect('/payment');
-                }
-                else{
-                  req.flash('error_msg', "Error Occured");
-                  res.redirect('/payment');
-                }
-              }
-              else{                        
-                User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.acc}}, (err10, result10)=>{
-                  if(err10)res.send(err10);
-                  else{
-                    res.redirect(response.payment_request.longurl)
-                  }
-                })
+          });
+          workshop.forEach(x=>{
+            if(x.workshop_id == "5dfd36336dea263d7cec0444"){
+              total_amount = total_amount + 7499;
+            }
+            if(events.length == 0){
+              if(x.workshop_id != "5dfd36336dea263d7cec0444"){
+                total_amount = total_amount + 999;
               }
             }
           });
-        }
-      });
-    }
-  });
+          if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0) ){
+            total_amount = total_amount + 999;
+          }
+          if(total_amount == 0){
+            req.flash('error_msg', "Payment could not be zero.");
+            res.redirect('/payment?type=payment');
+          }
+          else{
+            var data = new Insta.PaymentData();
+            data.purpose = "E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
+            data.amount = total_amount;
+            data.currency                = 'INR';
+            data.buyer_name              = req.user.first_name;
+            data.email                   = req.user.email;
+            data.phone                   = req.user.phone;
+            data.webhook                 = 'https://esummitiitbhu.com/payment-webhook-14567899'
+            data.send_sms                = 'True';
+            data.send_email              = 'True';
+            data.allow_repeated_payments = 'False';                  
+            data.setRedirectUrl('https://esummitiitbhu.com/pay789456');
+             
+            Insta.createPayment(data, function(error, response) {
+              if (error) {
+                // some error
+              } else {
+                response = JSON.parse(response);
+                // Payment redirection link at response.payment_request.longurl
+                if(response.success == false){
+                  if(response.message.phone){
+                    req.flash('error_msg', response.message.phone[0]);
+                    res.redirect('/payment?type=payment');
+                  }
+                  else if(response.message.email){
+                    req.flash('error_msg', response.message.email[0]);
+                    res.redirect('/payment?type=payment');
+                  }
+                  else{
+                    req.flash('error_msg', "Error Occured");
+                    res.redirect('/payment?type=payment');
+                  }
+                }
+                else{                        
+                  User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.acc}}, (err10, result10)=>{
+                    if(err10)res.send(err10);
+                    else{
+                      res.redirect(response.payment_request.longurl)
+                    }
+                  })
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+  
 });
 
 router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
@@ -197,6 +240,29 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
       }
     });
   }
+});
+
+router.get('/visitorpay789456', middleware.ensureAuthenticated, (req, res)=>{
+  var payment_id = req.query.payment_id;
+  var payment_request_id = req.query.payment_request_id;
+  var status = req.query.payment_status;
+  var email = req.user.email;
+  var name = req.user.first_name;
+  var phone = req.user.phone;
+  var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status});
+  newVisitorPass.save((err, rest)=>{
+    if(err)res.send(err)
+    else{
+      if(status == "Credit"){
+      req.flash('success_msg','Visitor pass payment success');
+      }
+      else{
+        req.flash('error_msg','Payment Failed');
+      }
+      res.redirect('/dashboard-participate');
+    }
+    
+  })
 });
 
 router.post('/payment-webhook-14567899', (req, res) => {
@@ -619,44 +685,51 @@ router.post('/register', (req, res) => {
     }
     else {
       var flag =0;
-      
       if(referal_from !=null){
-        refer.referal.forEach(x => {
-          if(x.referal_code == referal_from){
-            flag =1;
-            User.findOne({ email: email }).then(user => {
-              if (user) {
-                errors.push({ msg: 'Email already exists' });
-                res.render('register', { errors, email, password });
-              } 
-              else {
-                User.find().sort({esummit_id: -1}).limit(1).then(ff =>{
-                  var esummit_id = ff[0].esummit_id;
-                  esummit_id = parseInt(esummit_id.substring(3,7));
-                  esummit_id = esummit_id + 1;
-                  esummit_id = "ES-" + esummit_id;                  
-                  var newUser = new User({ first_name, last_name, email, password, phone, college, city, referal_from,  startup, esummit_id});
-                  bcrypt.genSalt(10, (err, salt) => {
-                  bcrypt.hash(newUser.password, salt, (err, hash) => {
-                    if (err) throw err;
-                    newUser.password = hash;
-                    newUser.save().then(user => {
-                      req.flash('success_msg','You are now registered and can log in');
-                      res.redirect('/login');
-                      })
-                      .catch(err => console.log(err));
-                  })    
+        request.get('http://ca-ecell.herokuapp.com/qwyuidhjwdhjdw', function(err2, res2, body){
+          if(err2){
+            res.send(err2)
+          }
+          else{
+            body = JSON.parse(body);
+            body.forEach(x => {
+              if(x.referal_code == referal_from){
+                flag =1;
+                User.findOne({ email: email }).then(user => {
+                  if (user) {
+                    errors.push({ msg: 'Email already exists' });
+                    res.render('register', { errors, email, password });
+                  } 
+                  else {
+                    User.find().sort({esummit_id: -1}).limit(1).then(ff =>{
+                      var esummit_id = ff[0].esummit_id;
+                      esummit_id = parseInt(esummit_id.substring(3,7));
+                      esummit_id = esummit_id + 1;
+                      esummit_id = "ES-" + esummit_id;                  
+                      var newUser = new User({ first_name, last_name, email, password, phone, college, city, referal_from,  startup, esummit_id});
+                      bcrypt.genSalt(10, (err, salt) => {
+                      bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        if (err) throw err;
+                        newUser.password = hash;
+                        newUser.save().then(user => {
+                          req.flash('success_msg','You are now registered and can log in');
+                          res.redirect('/login');
+                          })
+                          .catch(err => console.log(err));
+                      })    
+                    })
+                    })
+                    
+                  }
                 })
-                })
-                
               }
-            })
+            });
+            if(flag ==0){
+              errors.push({ msg: 'Invalid Referal Code' });
+              res.render('register', { errors, email, password });
+            }
           }
         });
-        if(flag ==0){
-          errors.push({ msg: 'Invalid Referal Code' });
-          res.render('register', { errors, email, password });
-        }
       }
       else{
         User.findOne({ email: email }).then(user => {
@@ -693,18 +766,26 @@ router.post('/referal-submit', (req, res) => {
   var code = req.body.code;
   var flag= 0;
   if(code !=null){
-    refer.referal.forEach(x => {
-      if(x.referal_code == code){
-        flag= 1;
-        User.findOneAndUpdate({email: req.user.email}, {$set:{referal_from : code}}, (err, result) =>{
-          if(err)res.send(err);
-          else{
-            req.flash('success_msg','Referal Completed');
-            res.redirect('/dashboard?type=profile');
+    request.get('http://ca-ecell.herokuapp.com/qwyuidhjwdhjdw', function(err2, res2, body){
+      if(err2){
+        res.send(err2)
+      }
+      else{
+        body = JSON.parse(body);
+        body.forEach(x => {
+          if(x.referal_code == code){
+            flag= 1;
+            User.findOneAndUpdate({email: req.user.email}, {$set:{referal_from : code}}, (err, result) =>{
+              if(err)res.send(err);
+              else{
+                req.flash('success_msg','Referal Completed');
+                res.redirect('/dashboard?type=profile');
+              }
+            });
           }
         });
       }
-    });
+    })
     if(flag === 0){
       req.flash('error_msg','Invalid Referal Code');
       res.redirect('/dashboard?type=profile');

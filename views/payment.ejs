@@ -151,9 +151,15 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="/payment">
+                <a class="nav-link" href="/payment?type=payment">
                   <i class="material-icons">payment</i>
                   <p>Payments</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/payment?type=pass">
+                  <i class="material-icons">visitor</i>
+                  <p>Visitors Pass</p>
                 </a>
               </li>
               <!-- <li class="nav-item schedule-panel">
@@ -224,10 +230,11 @@
                         <h4 class="card-title">Payment Portal</h4>
                        <!--  <p class="card-category">Note: If you are the leader of the team, then deleting/leaving the team would dissolve the entire team. </p>
                      --></div>
+                    <% if(type == "payment"){ %>
                     <div class="container-fluid">
                       
                         <% if(user.startup == false){ %>
-                        <form action="/payment" method="post">
+                        <form action="/payment?type=payment" method="post">
                           <% if(events.length !=0 || (workshop.length == 0 && events.length == 0)){ %>
                             <% if(user.registration == false){ %>
                               <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 20th Jan'20) </h5>
@@ -392,6 +399,16 @@
                           </form>
                         <% } %>
                     </div>
+                    <% } %>
+                    <% if(type == "pass"){ %>
+                    <div class="container-fluid">
+                      <form action="/payment?type=pass" method="post">
+                        <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Visitor's Pass</h5>  
+                        <p style="font-size: 19px;color: gray;margin: 15px auto;">Price for visitor's pass : ₹ 499</p>
+                        <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
+                      </form>
+                    </div>
+                    <% } %>
                 </div>
             </div>
     
