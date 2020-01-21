@@ -805,12 +805,13 @@ router.post('/referal-submit', (req, res) => {
             });
           }
         });
+        if(flag === 0){
+          req.flash('error_msg','Invalid Referal Code');
+          res.redirect('/dashboard?type=profile');
+        }
       }
     })
-    if(flag === 0){
-      req.flash('error_msg','Invalid Referal Code');
-      res.redirect('/dashboard?type=profile');
-    }
+    
   }
   else{
     req.flash('error_msg','Referal Code Empty');
