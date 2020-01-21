@@ -52,26 +52,36 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
     else{
       var eventECarnival = false;
       EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
+        var e_carnival = false;
         events.forEach(x=> {
+          if(x.name == "E-Carnival"){
+            e_carnival = true;
+          }
           if(req.user.startup == true && x.name == "E-Carnival"){
             eventECarnival = true;
             total_amount = total_amount + 2499;
           }
         });
+        if(events.length == 1 && e_carnival){
+          e_carnival = true;
+        }
+        else{
+          e_carnival = false;
+        }
         workshop.forEach(x=>{
           if(x.workshop_id == "5dfd36336dea263d7cec0444"){
             total_amount = total_amount + 7499;
           }
-          if(events.length == 0){
+          if(events.length == 0 || e_carnival){
             if(x.workshop_id != "5dfd36336dea263d7cec0444"){
               total_amount = total_amount + 999;
             }
           }
         });
-        if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
+        if((req.user.registration == false && events.length!=0 && req.user.startup == false && !e_carnival) || (req.user.registration == false && req.user.startup == true && !e_carnival) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
           total_amount = total_amount + 999;
         }
-        res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival, type: req.query.type});
+        res.render('payment', {user: req.user, workshop : workshop, events: events, amount : total_amount, eventECarnival : eventECarnival, type: req.query.type, e_carnival : e_carnival});
       })
     }
   })
@@ -124,22 +134,33 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
       }
       else{
         EventRegister.find({student_id : req.user.email, payment : false}, (err2, events) => {
+          var e_carnival = false;
           events.forEach(x=> {
+            if(x.name == "E-Carnival"){
+              e_carnival = true;
+            }
             if(req.user.startup == true && x.name == "E-Carnival"){
+              
               total_amount = total_amount + 2499;
             }
           });
+          if(events.length == 1 && e_carnival){
+            e_carnival = true;
+          }
+          else{
+            e_carnival = false;
+          }
           workshop.forEach(x=>{
             if(x.workshop_id == "5dfd36336dea263d7cec0444"){
               total_amount = total_amount + 7499;
             }
-            if(events.length == 0){
+            if(events.length == 0 || e_carnival){
               if(x.workshop_id != "5dfd36336dea263d7cec0444"){
                 total_amount = total_amount + 999;
               }
             }
           });
-          if((req.user.registration == false && events.length!=0 )|| (req.user.registration == false && req.user.startup == true) || (req.user.registration == false && events.length==0 && workshop.length == 0) ){
+          if((req.user.registration == false && events.length!=0 && req.user.startup == false && !e_carnival) || (req.user.registration == false && req.user.startup == true && !e_carnival) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
             total_amount = total_amount + 999;
           }
           if(total_amount == 0){

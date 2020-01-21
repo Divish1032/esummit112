@@ -329,7 +329,8 @@
                         
                         <% if(user.startup == true){ %>
                           <form action="/payment" method="post">
-                            <% if(user.registration == false){ %>
+                            <% if(e_carnival == false || user.registration == true){ %>
+                            <% if(user.registration == false ){ %>
                               <div class="row" style="margin-top: 45px;">
                                 <div class="col-6" ><h5>Professional Registration Fee</h5></div>
                                 <div class="col-6"><span>Rs. 999 <small style="margin-left: 10px;color: #0cf9b6;">Early Bird Offer!!! (till 23th Jan'20)</small></span></div>
@@ -366,6 +367,7 @@
                               </div>
                             <% }else{ %>
                             <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Professional Registration Done.</h5>
+                            <% } %>
                             <% } %>
                           <div >
                            <h5 style="margin: 10px 0px;font-size: 19px;color: #AAA;">Paid Startup Event : </h5> 
