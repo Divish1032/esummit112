@@ -77,6 +77,24 @@ router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
     })
 });
 
+// Workshop Data
+router.get('/workshopregister-history-feFr6fe/gthERNgtaxxm', (req, res) => {
+    User.find({}, (err, user) => {
+        WorkshopRegister.find({}, (err3, workshop) => {
+            var result = [];
+            user.forEach(x => {
+                workshop.forEach(y => {
+                    if( x.email == y.email){
+                        result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, email : x.email, workshops : y.workshop_name, payment: y.payment});
+                    }
+                });
+            });
+            res.send(result);
+        })
+    })
+});
+
+
 router.get('/user-historygrtja45rhwe5/g5g4erg5egg545eg4njtj', (req, res) => {
     User.find({}, (err, payment) => {
         EventRegister.find({}, ( err2, eventPayment) => {
@@ -102,6 +120,31 @@ router.get('/user-historygrtja45rhwe5/g5g4erg5egg545eg4njtj', (req, res) => {
         })
     })
 });
+
+// Events Data
+router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, res) => {
+    User.find({}, (err, user) => {
+        EventRegister.find({}, (err3, event) => {
+            var result = [];
+            user.forEach(x => {
+                event.forEach(y => {
+                    if( x.email == y.student_id){
+                        result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, email : x.email, event : y.name, team_name: y.team_name, payment: y.payment});
+                    }
+                });
+            });
+            res.send(result);
+        })
+    })
+});
+
+
+/* router.get('/workshop-entry565ferf', (req, res) => {
+    var workshop = new Workshop({name: "A Story To Tell by Dhruv Sehgal", price : 0});
+    workshop.save().then(wk => {
+        res.send("true");
+    })
+}) */
 
 
   module.exports = router;

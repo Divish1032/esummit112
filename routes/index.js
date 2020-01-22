@@ -72,11 +72,6 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
           if(x.workshop_id == "5dfd36336dea263d7cec0444"){
             total_amount = total_amount + 7499;
           }
-          if(events.length == 0 || e_carnival){
-            if(x.workshop_id != "5dfd36336dea263d7cec0444"){
-              total_amount = total_amount + 999;
-            }
-          }
         });
         if((req.user.registration == false && events.length!=0 && req.user.startup == false && !e_carnival) || (req.user.registration == false && req.user.startup == true && !e_carnival) || (req.user.registration == false && events.length==0 && workshop.length == 0)){
           total_amount = total_amount + 999;
@@ -423,7 +418,7 @@ router.post('/dashboard/workshop', middleware.ensureAuthenticated , (req,res) =>
   var email = req.user.email;
   var name = req.user.first_name + req.user.last_name;
 
-  WorkshopRegister.findOne({email : email, _id : workshop_id}, (err, result) => {
+  WorkshopRegister.findOne({email : email, workshop_id : workshop_id}, (err, result) => {
     if(!result){
       Workshop.findById(workshop_id, (er, rr) =>{
         if(er)res.send("Error");

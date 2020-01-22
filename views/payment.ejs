@@ -235,7 +235,7 @@
                       
                         <% if(user.startup == false){ %>
                         <form action="/payment?type=payment" method="post">
-                          <% if(events.length !=0 || (workshop.length == 0 && events.length == 0)){ %>
+                          <% if(events.length !=0 || workshop.length == 0 ){ %>
                             <% if(user.registration == false){ %>
                               <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 23th Jan'20) </h5>
                               <div class="row" style="    width: 80%;margin: 25px auto;">
@@ -273,9 +273,9 @@
                             </div>
                           <% } %>
                           <div>
-                          <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Registered Workshops : </h5> 
+                          <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Paid Workshops : </h5> 
                             <% if(workshop.length != 0){ %>
-                              <% if(events.length == 0){ %>
+                            
                                 <% workshop.forEach(x => { %>
                                   <div class="row" style="margin-left: 20px;">
                                     <div class="col-6">
@@ -284,28 +284,12 @@
                                     <div class="col-6">
                                       <% if(x.workshop_id == "5dfd36336dea263d7cec0444"){ %>
                                       <p>Rs. 7499</p>
-                                      <% }else{ %>
-                                      <p>Rs. 999</p>
-                                      <% } %>
-                                    </div>
-                                  </div>                             
-                                <% }) %>
-                              <% }else{ %>
-                                <% workshop.forEach(x => { %>
-                                  <div class="row" style="margin-left: 20px;">
-                                    <div class="col-6">
-                                      <p><%= x.workshop_name %></p>
-                                    </div>
-                                    <div class="col-6">
-                                      <% if(x.workshop_id == "5dfd36336dea263d7cec0444"){ %>
-                                      <p>Rs. 7499</p>
-                                      <% }else{ %>
-                                      <p>Rs. 0</p>
+                                      
                                       <% } %>
                                     </div>
                                   </div>  
                                 <% }) %>
-                              <% } %>
+                              
                             <% }else{ %>
                               <div class="row"  style="margin-left: 20px;">
                                 <div class="col-12"><p>No new workshop added for payment. Please first make you team.</p></div>
