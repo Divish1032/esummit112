@@ -151,15 +151,9 @@
                 </a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="/payment?type=payment">
+                <a class="nav-link" href="/payment">
                   <i class="material-icons">payment</i>
                   <p>Payments</p>
-                </a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="/payment?type=pass">
-                  <i class="material-icons">visitor</i>
-                  <p>Visitors Pass</p>
                 </a>
               </li>
               <!-- <li class="nav-item schedule-panel">
@@ -228,74 +222,55 @@
                 <div class="card" style="padding-bottom: 50px;color: white;">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title">Payment Portal</h4>
-                       <!--  <p class="card-category">Note: If you are the leader of the team, then deleting/leaving the team would dissolve the entire team. </p>
-                     --></div>
-                    <% if(type == "payment"){ %>
+                        <p class="card-category">Note: Do not close the payment tab before the payment is completely successfull (Let it redirect to esummit website).</p>
+                    </div>
+                    
                     <div class="container-fluid">
-                      
-                        <% if(user.startup == false){ %>
-                        <form action="/payment?type=payment" method="post">
-                          <% if(events.length !=0 || workshop.length == 0 ){ %>
-                            <% if(user.registration == false){ %>
-                              <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Student Registration - Early Bird Offer (till 23th Jan'20) </h5>
-                              <div class="row" style="    width: 80%;margin: 25px auto;">
-                                <div class="col-sm-4">
-                                    <label style="position: relative;top: 2px;">Registration + Accomodation</label>
-                                </div>
-                                <div class="col-sm-8">
-                                        <div class="form-check" style="    width: 50%;float: left;">
-                                                <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios1" value="yes" required>
-                                                <label class="form-check-label" for="exampleRadios1">
-                                                  Yes
-                                                </label>
-                                                <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999 - Early Bird!!</small>
-                                              </div>
-                                              <div class="form-check" style="    width: 50%;float: left;">
-                                                <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios2" value="no" required>
-                                                <label class="form-check-label" for="exampleRadios2">
-                                                  No (Only registration)
-                                                </label>
-                                                <small style="margin-left: 10px;color: #0cf9b6;">Rs. 999</small>
-                                              </div>
-                                </div>   
-                              </div>
-                            <% }else{ %>
-                              <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Student Registration Done.</h5>
-                            <% } %>
-                            <div class="row" style="font-size: 19px;"> 
+                      <form action="/payment?type=payment" method="post">
+                        <% if(user.startup == true && user.registration == true){ %>
+                        <h4 style="margin-top: 25px;color: #f4b00e;text-decoration: underline;font-size: 20px;">Professional Registration Done.</h4>
+                        <% }else if(user.startup == false && user.registration == true){ %>
+                          <h4 style="margin-top: 25px;color: #f4b00e;text-decoration: underline;font-size: 20px;">Student Registration Done.</h4>
+                        <% } %>
+
+                        <h5 style="margin-top: 60px;text-align: center;font-size: 20px;font-weight: bold;text-decoration: underline;color: #959191;">Registration (Early Bird - till 23th Jan'20)</h5>
+                          
+                        
+                            <div class="form-group" style="margin-top: 50px;">
+                            <label for="exampleInputEmail1">Payment Options</label>
+                            <select class="form-control" id="mySelect" onchange="amountchange()" name="amount">
+                              <% if(user.startup == false){ %>
+                              <option value="1" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
+                              <!-- <option value="2" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
+                               -->
+                              <option value="4" > KPMG's Lean Six Sigma Green Belt Training Programme for students</option>
+                              <% }else{ %>
+                              <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
+                              <option value="5" > E-Carnival (Early Bird - till 23th Jan'20) for Startups</option>
+                              <% } %>
+                              <option value="6" > Visitors Pass</option>
                               
-                              <div class="col-6">
-                                <p style="color: #AAA;">Student Events are free after registration :</p>
+                            </select>
+                            <i class="fa fa-caret-down" style="float: right;color:white;font-size: 30px;position: relative;top: -35px;"></i>
+                          </div>
+                          <div class="row" style="margin-top: 40px;margin-bottom: 40px;">
+                            <div class="col-sm-4">With Accomodation?</div>
+                            <div class="col-sm-8">
+                              <div class="form-check" style="    width: 50%;float: left;">
+                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="accomodation" id="exampleRadios1" value="yes" required>
+                                  <label class="form-check-label" for="exampleRadios1">
+                                    Yes
+                                  </label>
                               </div>
-                              <div class="col-6" style="position: relative;left: 20px;font-size: 15px;">
-                                <p>Rs. 0</p>
+                              <div class="form-check" style="    width: 50%;float: left;">
+                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="accomodation" id="exampleRadios2" value="no" required>
+                                  <label class="form-check-label" for="exampleRadios2">
+                                    No 
+                                  </label>
                               </div>
                             </div>
-                          <% } %>
-                          <div>
-                          <h5 style="margin: 10px 0px;color: #AAA;font-size: 19px;">Paid Workshops : </h5> 
-                            <% if(workshop.length != 0){ %>
-                            
-                                <% workshop.forEach(x => { %>
-                                  <div class="row" style="margin-left: 20px;">
-                                    <div class="col-6">
-                                      <p><%= x.workshop_name %></p>
-                                    </div>
-                                    <div class="col-6">
-                                      <% if(x.workshop_id == "5dfd36336dea263d7cec0444"){ %>
-                                      <p>Rs. 7499</p>
-                                      
-                                      <% } %>
-                                    </div>
-                                  </div>  
-                                <% }) %>
-                              
-                            <% }else{ %>
-                              <div class="row"  style="margin-left: 20px;">
-                                <div class="col-12"><p>No new workshop added for payment. Please first make you team.</p></div>
-                              </div>
-                            <% } %>
                           </div>
+                           
                           <hr style="background-color: white;width: 75%;margin: 17px 0;">
                           <div class="row" style="font-size: 19px;color: #AAA;">
                             <div class="col-6">
@@ -303,98 +278,14 @@
                             </div>
                             <div class="col-6">
                               <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                                Rs. <span class="tt"><%= amount %></span>
+                                Rs. <span class="tt">dd</span>
                               </p>
                             </div>
                           </div>
                           <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
                         </form>
-                        <% } %>
-                        
-                        <% if(user.startup == true){ %>
-                          <form action="/payment" method="post">
-                            <% if(e_carnival == false || user.registration == true){ %>
-                            <% if(user.registration == false ){ %>
-                              <div class="row" style="margin-top: 45px;">
-                                <div class="col-6" ><h5>Professional Registration Fee</h5></div>
-                                <div class="col-6"><span>Rs. 999 <small style="margin-left: 10px;color: #0cf9b6;">Early Bird Offer!!! (till 23th Jan'20)</small></span></div>
-                              </div>
-                              <div class="row" style="width: 80%;margin: 25px auto;">
-                                <div class="col-12">
-                                  <div class="row">
-                                    <div class="col-6">
-                                      <label >Accomodation?</label> 
-                                    </div>
-                                      <div class="col-6">
-                                        <div class="row">
-                                          <div class="col-6">
-                                            <input  style="cursor: pointer;"  class="form-check-input"  style="opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="acc" id="exampleRadios11" value="yes" required checked>
-                                            <label  style="cursor: pointer;" class="form-check-label" for="exampleRadios11">
-                                              Yes
-                                            </label>
-                                          </div>
-                                          <div class="col-6">
-                                            <input  style="cursor: pointer;" class="form-check-input"  style="opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="acc" id="exampleRadios22" value="no" required>
-                                            <label  style="cursor: pointer;" class="form-check-label" for="exampleRadios22">
-                                              No
-                                            </label>
-                                          </div>
-                                        </div>
-                                        
-                                        
-                                      </div>
-                                  </div>
-                                  
-                                   
-                                </div>
-                                
-                              </div>
-                            <% }else{ %>
-                            <h5 style="margin-top: 20px;margin-bottom: 20px; font-size: 20px; color:rgb(0, 243, 255);text-decoration: underline;">Professional Registration Done.</h5>
-                            <% } %>
-                            <% } %>
-                          <div >
-                           <h5 style="margin: 10px 0px;font-size: 19px;color: #AAA;">Paid Startup Event : </h5> 
-                            <% if(eventECarnival){ %>
-                              <div class="row" style="margin-left: 20px;">
-                                <div class="col-6">
-                                  <p>E-Carnival</p>
-                                </div>
-                                <div class="col-6">
-                                  <p>Rs. 2499</p>
-                                </div>
-                              </div>
-                            <% }else{ %>
-                              <div class="row"  style="margin-left: 20px;">
-                                <div class="col-12"><p>No new event added for payment.</p></div>
-                              </div>
-                            <% } %>
-                          </div>
-                          <hr style="background-color: white;width: 75%;margin: 17px 0;">
-                          <div class="row" style="font-size: 19px;color: #AAA;">
-                            <div class="col-6">
-                              <p>Total : </p>
-                            </div>
-                            <div class="col-6">
-                              <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                                Rs. <span class="tt"><%= amount %></span>
-                              </p>
-                            </div>
-                          </div>
-                          <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
-                          </form>
-                        <% } %>
+                        <p style="font-size: 14px;color: #ccb8b8;">* Before paying fees for E-Carnival or KPMG Workshop please check weather you have participated in that event/workshop or not.</p>
                     </div>
-                    <% } %>
-                    <% if(type == "pass"){ %>
-                    <div class="container-fluid">
-                      <form action="/payment?type=pass" method="post">
-                        <h5 style="text-align: center;margin-top: 35px;font-size: 22px;">Visitor's Pass</h5>  
-                        <p style="font-size: 19px;color: gray;margin: 15px auto;">Price for visitor's pass : ₹ 499</p>
-                        <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
-                      </form>
-                    </div>
-                    <% } %>
                 </div>
             </div>
     
@@ -604,6 +495,26 @@
           md.initDashboardPageCharts();
     
         });
+      </script>
+      <script>
+        var amount = parseInt($('#mySelect').val());
+        var total = 0;
+        if(amount == 1)total= 999;
+        if(amount == 3)total= 999;
+        if(amount == 4)total= 7499;
+        if(amount == 5)total= 2499;
+        if(amount == 6)total= 499;
+        $('.tt').text(total)
+        console.log(amount);
+        function amountchange() {
+          amount = parseInt($('#mySelect').val());
+          if(amount == 1)total= 999;
+          if(amount == 3)total= 999;
+          if(amount == 4)total= 7499;
+          if(amount == 5)total= 2499;
+          if(amount == 6)total= 499;
+          $('.tt').text(total);
+        }
       </script>
       
     </body>
