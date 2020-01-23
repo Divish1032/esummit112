@@ -139,12 +139,12 @@ router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, r
 });
 
 
-/* router.get('/workshop-entry565ferf', (req, res) => {
+router.get('/workshop-entry565ferf', (req, res) => {
     var workshop = new Workshop({name: "A Story To Tell by Dhruv Sehgal", price : 0});
     workshop.save().then(wk => {
         res.send("true");
     })
-}) */
+})
 
 
   module.exports = router;
