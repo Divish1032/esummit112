@@ -51,13 +51,14 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
 router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
   var amount = parseInt(req.body.amount);
   var total = 0;
+  var visit = false;
   if(amount == 1){
     total= 999;
-    instaPayment(total, req, res)
+    instaPayment(total, req, res, visit)
   }
   else if(amount == 3){
     total= 999;
-    instaPayment(total, req, res)
+    instaPayment(total, req, res, visit)
   }
   else if(amount == 4){
     total= 7499;
@@ -65,7 +66,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
       if(errr)res.send(errr);
       else{
         if(wkp.length !=0){
-          instaPayment(total, req, res)
+          instaPayment(total, req, res, visit)
         }
         else{
           req.flash('error_msg', "You have not registered this workshop yet in participate tab.");
@@ -80,7 +81,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
       if(errr)res.send(errr);
       else{
         if(evt.length !=0){
-          instaPayment(total, req, res)
+          instaPayment(total, req, res, visit)
         }
         else{
           req.flash('error_msg', "You have not participated in E-Carnival yet.");
@@ -90,15 +91,21 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     });
   }
   else if(amount == 6){
+    total= 800;
+    visit = true;
+    instaPayment(total, req, res, visit)
+  }
+  else if(amount == 7){
     total= 300;
-    instaPayment(total, req, res)
+    visit = true;
+    instaPayment(total, req, res, visit)
   }
 
 
   
 });
 
-function instaPayment(total, req, res) {
+function instaPayment(total, req, res, visit) {
   var data = new Insta.PaymentData();
   data.purpose = "E-Summit 2020 IIT(BHU) Varanasi: "+ req.user.esummit_id;            // REQUIRED
   data.amount = total;
@@ -132,13 +139,25 @@ function instaPayment(total, req, res) {
           res.redirect('/payment?type=payment');
         }
       }
-      else{                        
-        User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.accomodation}}, (err, result)=>{
-          if(err)res.send(err);
-          else{
-            res.redirect(response.payment_request.longurl);
-          }
-        })
+      else{  
+        console.log(visit)
+        if(!visit){
+          User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.accomodation}}, (err, result)=>{
+            if(err)res.send(err);
+            else{
+              res.redirect(response.payment_request.longurl);
+            }
+          });
+        }
+        else{
+          User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : null}}, (err, result)=>{
+            if(err)res.send(err);
+            else{
+              res.redirect(response.payment_request.longurl);
+            }
+          });
+        }                      
+        
       }
     }
   });
@@ -199,8 +218,18 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                 }
               })
             }
+            else if(amount == 800){
+              var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status, accomodation: true});
+              newVisitorPass.save((err, rest)=>{
+                if(err)res.send(err)
+                else{
+                  req.flash('success_msg','Payment Success for Visitors Pass');
+                  res.redirect('/dashboard-participate');
+                }
+              });
+            }
             else if(amount == 300){
-              var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status});
+              var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status, accomodation: false});
               newVisitorPass.save((err, rest)=>{
                 if(err)res.send(err)
                 else{

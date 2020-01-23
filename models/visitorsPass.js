@@ -24,6 +24,9 @@ var visitorSchema = new mongoose.Schema({
   status : {
       type: String,
       required: true
+  },
+  accomodation: {
+    type: Boolean
   }
 });
 

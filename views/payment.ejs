@@ -251,16 +251,17 @@
                               <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
                               <option value="5" > E-Carnival (Early Bird - till 23th Jan'20) for Startups</option>
                               <% } %>
-                              <option value="6" > Visitors Pass(includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
+                              <option value="6" > Visitors Pass + Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
+                              <option value="7" > Visitors Pass  + Without Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
                               
                             </select>
                             <i class="fa fa-caret-down" style="float: right;color:white;font-size: 30px;position: relative;top: -35px;"></i>
                           </div>
-                          <div class="row" style="margin-top: 40px;margin-bottom: 40px;">
+                          <div class="row accm" style="margin-top: 40px;margin-bottom: 40px;">
                             <div class="col-sm-4">With Accomodation?</div>
                             <div class="col-sm-8">
                               <div class="form-check" style="    width: 50%;float: left;">
-                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="accomodation" id="exampleRadios1" value="yes" required>
+                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="accomodation" id="exampleRadios1" value="yes" required checked>
                                   <label class="form-check-label" for="exampleRadios1">
                                     Yes
                                   </label>
@@ -274,8 +275,8 @@
                             </div>
                           </div>
                            
-                          <hr style="background-color: white;width: 75%;margin: 17px 0;">
-                          <div class="row" style="font-size: 19px;color: #AAA;">
+                          <hr id="hrrr" style="background-color: white;width: 75%;margin: 17px 0;">
+                          <div class="row" style="font-size: 19px;color: #AAA;margin-top: 50px;">
                             <div class="col-6">
                               <p>Total : </p>
                             </div>
@@ -506,7 +507,17 @@
         if(amount == 3)total= 999;
         if(amount == 4)total= 7499;
         if(amount == 5)total= 2499;
-        if(amount == 6)total= 300;
+        if(amount == 6){
+          total= 800;
+          $('.accm, #hrrr').hide();
+        }
+        else if(amount == 7){
+          total= 300;
+          $('.accm, #hrrr').hide();
+        }
+        else{
+          $('.accm, #hrrr').show();
+        }
         $('.tt').text(total)
         console.log(amount);
         function amountchange() {
@@ -515,7 +526,17 @@
           if(amount == 3)total= 999;
           if(amount == 4)total= 7499;
           if(amount == 5)total= 2499;
-          if(amount == 6)total= 300;
+          if(amount == 6){
+            total= 800;
+            $('.accm, #hrrr').hide();
+          }
+          else if(amount == 7){
+            total= 300;
+            $('.accm, #hrrr').hide();
+          }
+          else{
+            $('.accm, #hrrr').show();
+          }
           $('.tt').text(total);
         }
       </script>
