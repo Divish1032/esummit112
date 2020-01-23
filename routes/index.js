@@ -117,7 +117,7 @@ function instaPayment(total, req, res, visit) {
   data.send_sms                = 'True';
   data.send_email              = 'True';
   data.allow_repeated_payments = 'True';                  
-  data.setRedirectUrl('http://localhost:9000/pay789456');
+  data.setRedirectUrl('https://esummitiitbhu.com/pay789456');
     
   Insta.createPayment(data, function(error, response) {
     if (error) {
