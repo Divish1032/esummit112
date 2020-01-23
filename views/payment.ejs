@@ -248,7 +248,7 @@
                               <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
                               <option value="5" > E-Carnival (Early Bird - till 23th Jan'20) for Startups</option>
                               <% } %>
-                              <option value="6" > Visitors Pass</option>
+                              <option value="6" > Visitors Pass (includes all talks).</option>
                               
                             </select>
                             <i class="fa fa-caret-down" style="float: right;color:white;font-size: 30px;position: relative;top: -35px;"></i>
@@ -278,7 +278,7 @@
                             </div>
                             <div class="col-6">
                               <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                                Rs. <span class="tt">dd</span>
+                                Rs. <span class="tt"></span>
                               </p>
                             </div>
                           </div>
@@ -503,7 +503,7 @@
         if(amount == 3)total= 999;
         if(amount == 4)total= 7499;
         if(amount == 5)total= 2499;
-        if(amount == 6)total= 499;
+        if(amount == 6)total= 300;
         $('.tt').text(total)
         console.log(amount);
         function amountchange() {
@@ -512,7 +512,7 @@
           if(amount == 3)total= 999;
           if(amount == 4)total= 7499;
           if(amount == 5)total= 2499;
-          if(amount == 6)total= 499;
+          if(amount == 6)total= 300;
           $('.tt').text(total);
         }
       </script>

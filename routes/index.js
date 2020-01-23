@@ -90,7 +90,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     });
   }
   else if(amount == 6){
-    total= 499;
+    total= 300;
     instaPayment(total, req, res)
   }
 
@@ -199,7 +199,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                 }
               })
             }
-            else if(amount == 499){
+            else if(amount == 300){
               var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status});
               newVisitorPass.save((err, rest)=>{
                 if(err)res.send(err)
