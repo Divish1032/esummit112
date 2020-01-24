@@ -44,11 +44,25 @@ await User.findOneAndUpdate({email : x.email} ,{$set:{esummit_id : eid}}, (err3,
 }
 
 router.post('/payment-true45454565923dew', (req, res) => {
-    User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{ registration : true, accomodation: "yes"}}, (err, result) =>{
-        EventRegister.updateMany({student_id: result.email, payment: false} ,{$set:{payment : true}}, (err3, event3) => { 
-        res.render("tab")
-        });
-    })
+    
+    User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, user) =>{
+        if(err)res.send("Error");
+        else{
+          EventRegister.updateMany({student_id: user.email, payment: false, name: { $ne: "E-Carnival" }} ,{$set:{payment : true}}, (err2, result2) => { 
+            if(err2)res.send("Error2")
+            else{
+              WorkshopRegister.updateMany({email: user.email, payment: false, workshop_id: { $ne: "5dfd36336dea263d7cec0444" }} ,{$set:{payment : true}}, (err3, event3) => { 
+                if(err3)res.send("Error3")
+                else{
+                  req.flash('success_msg','Payment Success for registration');
+                  res.redirect('/test/tab');
+                }
+              })
+            }
+          })
+        }
+      });
+    
 });
 
 router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {

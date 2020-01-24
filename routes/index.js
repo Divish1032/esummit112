@@ -60,21 +60,6 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     total= 999;
     instaPayment(total, req, res, visit)
   }
-  else if(amount == 4){
-    total= 7499;
-    WorkshopRegister.find({email: req.user.email, workshop_id: "5dfd36336dea263d7cec0444"}, (errr, wkp) =>{
-      if(errr)res.send(errr);
-      else{
-        if(wkp.length !=0){
-          instaPayment(total, req, res, visit)
-        }
-        else{
-          req.flash('error_msg', "You have not registered this workshop yet in participate tab.");
-          res.redirect('/dashboard?type=workshop');
-        }
-      }
-    });
-  }
   else if(amount == 5){
     total= 2499;
     EventRegister.find({student_id: req.user.email, name: "E-Carnival"}, (errr, evt) =>{
@@ -205,15 +190,6 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                 if(err2)res.send("Error2")
                 else{
                   req.flash('success_msg','Payment Success for E-Carnival');
-                  res.redirect('/dashboard-participate');
-                }
-              })
-            }
-            else if(amount == 7499){
-              WorkshopRegister.updateMany({email: email, workshop_id: "5dfd36336dea263d7cec0444" } ,{$set:{payment : true}}, (err3, event3) => {
-                if(err3)res.send("Error2")
-                else{
-                  req.flash('success_msg','Payment Success for KPMG Workshop');
                   res.redirect('/dashboard-participate');
                 }
               })
