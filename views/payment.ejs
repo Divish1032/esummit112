@@ -237,9 +237,7 @@
                         <% } %>
 
                         <h5 style="margin-top: 60px;text-align: center;font-size: 20px;font-weight: bold;text-decoration: underline;color: #959191;">Registration (Early Bird - till 26th Jan'20)</h5>
-                          
-                        
-                            <div class="form-group" style="margin-top: 50px;">
+                          <div class="form-group" style="margin-top: 50px;">
                             <label for="exampleInputEmail1">Payment Options</label>
                             <select class="form-control" id="mySelect" onchange="amountchange()" name="amount">
                               <% if(user.startup == false){ %>
@@ -503,9 +501,13 @@
         var amount = parseInt($('#mySelect').val());
         var total = 0;
         if(amount == 1)total= 999;
-        if(amount == 3)total= 999;
         if(amount == 5)total= 2499;
-        if(amount == 6){
+        
+        if(amount == 3){
+          total= 999;
+          $('.accm, #hrrr').hide();
+        }
+        else if(amount == 6){
           total= 800;
           $('.accm, #hrrr').hide();
         }
@@ -523,7 +525,11 @@
           if(amount == 1)total= 999;
           if(amount == 3)total= 999;
           if(amount == 5)total= 2499;
-          if(amount == 6){
+          if(amount == 3){
+            total= 999;
+            $('.accm, #hrrr').hide();
+          }
+          else if(amount == 6){
             total= 800;
             $('.accm, #hrrr').hide();
           }

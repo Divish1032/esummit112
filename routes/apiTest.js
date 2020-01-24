@@ -153,12 +153,19 @@ router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, r
 });
 
 
+router.get('/workshop-deletehgj54/36nfgGHHg', (req, res) => {
+    WorkshopRegister.deleteMany({workshop_id : "5dfd36336dea263d7cec0444"}, (err3, workshop) => {
+        res.send("success")
+    })
+});
+
 router.get('/workshop-entry565ferf', (req, res) => {
     var workshop = new Workshop({name: "A Story To Tell by Dhruv Sehgal", price : 0});
     workshop.save().then(wk => {
         res.send("true");
     })
-})
+});
+
 
 
   module.exports = router;

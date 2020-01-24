@@ -58,6 +58,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
   }
   else if(amount == 3){
     total= 999;
+    visit = true;
     instaPayment(total, req, res, visit)
   }
   else if(amount == 5){
@@ -85,9 +86,6 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     visit = true;
     instaPayment(total, req, res, visit)
   }
-
-
-  
 });
 
 function instaPayment(total, req, res, visit) {
