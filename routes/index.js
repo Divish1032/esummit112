@@ -77,7 +77,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     });
   }
   else if(amount == 6){
-    total= 800;
+    total= 500;
     visit = true;
     instaPayment(total, req, res, visit)
   }
@@ -192,7 +192,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                 }
               })
             }
-            else if(amount == 800){
+            else if(amount == 500){
               var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status, accomodation: true});
               newVisitorPass.save((err, rest)=>{
                 if(err)res.send(err)
