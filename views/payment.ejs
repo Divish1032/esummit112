@@ -241,12 +241,16 @@
                             <label for="exampleInputEmail1">Payment Options</label>
                             <select class="form-control" id="mySelect" onchange="amountchange()" name="amount">
                               <% if(user.startup == false){ %>
-                              <option value="1" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                              <!-- <option value="2" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                               -->
+                                <% if(user.registration == false){ %>
+                                  <option value="1" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
+                                  <!-- <option value="2" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
+                                  -->
+                                <% } %>
                               <% }else{ %>
-                              <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
-                              <option value="5" > E-Carnival for Startups (including 1 person registration).</option>
+                                <% if(user.registration == false){ %>
+                                  <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
+                                <% } %>
+                                <option value="5" > E-Carnival for Startups (including 1 person registration).</option>
                               <% } %>
                               <option value="6" > Visitors Pass + Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
                               <option value="7" > Visitors Pass  + Without Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
