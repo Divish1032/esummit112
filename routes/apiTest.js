@@ -67,14 +67,14 @@ router.post('/payment999-true45454565923dew', (req, res) => {
 
 router.post('/payment2500-true45454565923dew', (req, res) => {
     
-    User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, reuslt) =>{
+    User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, result) =>{
         if(err)res.send("Error");
         else{
-          EventRegister.findOneAndUpdate({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
+          EventRegister.findOneAndUpdate({student_id: result.email} ,{$set:{payment : true}}, (err2, result2) => { 
             if(err2)res.send("Error2")
             else{
-              req.flash('success_msg','Payment Success for E-Carnival');
-              res.redirect('/dashboard-participate');
+              
+              res.redirect('/test/tab');
             }
           })
         }
