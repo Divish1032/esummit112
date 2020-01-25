@@ -184,13 +184,18 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
               });
             }
             else if(amount == 2500){
-              EventRegister.findOneAndUpdate({student_id: email, name: "E-Carnival"} ,{$set:{payment : true}}, (err2, result2) => { 
-                if(err2)res.send("Error2")
+              User.findOneAndUpdate({email : email}, {$set:{registration : true}}, (err, reuslt) =>{
+                if(err)res.send("Error");
                 else{
-                  req.flash('success_msg','Payment Success for E-Carnival');
-                  res.redirect('/dashboard-participate');
+                  EventRegister.findOneAndUpdate({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
+                    if(err2)res.send("Error2")
+                    else{
+                      req.flash('success_msg','Payment Success for E-Carnival');
+                      res.redirect('/dashboard-participate');
+                    }
+                  })
                 }
-              })
+              });
             }
             else if(amount == 500){
               var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status, accomodation: true});

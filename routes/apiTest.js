@@ -43,7 +43,7 @@ await User.findOneAndUpdate({email : x.email} ,{$set:{esummit_id : eid}}, (err3,
 });
 }
 
-router.post('/payment-true45454565923dew', (req, res) => {
+router.post('/payment999-true45454565923dew', (req, res) => {
     
     User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, user) =>{
         if(err)res.send("Error");
@@ -64,6 +64,24 @@ router.post('/payment-true45454565923dew', (req, res) => {
       });
     
 });
+
+router.post('/payment2500-true45454565923dew', (req, res) => {
+    
+    User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, reuslt) =>{
+        if(err)res.send("Error");
+        else{
+          EventRegister.findOneAndUpdate({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
+            if(err2)res.send("Error2")
+            else{
+              req.flash('success_msg','Payment Success for E-Carnival');
+              res.redirect('/dashboard-participate');
+            }
+          })
+        }
+      });
+    
+});
+
 
 router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
     User.find({registration : true}, (err, payment) => {
