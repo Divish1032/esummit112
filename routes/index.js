@@ -62,7 +62,7 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     instaPayment(total, req, res, visit)
   }
   else if(amount == 5){
-    total= 1800;
+    total= 2500;
     EventRegister.find({student_id: req.user.email, name: "E-Carnival"}, (errr, evt) =>{
       if(errr)res.send(errr);
       else{
@@ -183,7 +183,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                 }
               });
             }
-            else if(amount == 1800){
+            else if(amount == 2500){
               EventRegister.findOneAndUpdate({student_id: email, name: "E-Carnival"} ,{$set:{payment : true}}, (err2, result2) => { 
                 if(err2)res.send("Error2")
                 else{
