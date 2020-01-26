@@ -56,6 +56,10 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     total= 999;
     instaPayment(total, req, res, visit)
   }
+  else if(amount == 2){
+    total= 799;
+    instaPayment(total, req, res, visit)
+  }
   else if(amount == 3){
     total= 999;
     visit = true;
@@ -164,7 +168,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
           } 
           else {
             var amount = parseInt(body.payment_request.payment.unit_price);
-            if(amount == 999){
+            if(amount == 999 || amount == 799){
               User.findOneAndUpdate({email : email}, {$set:{registration : true}}, (err, reuslt) =>{
                 if(err)res.send("Error");
                 else{

@@ -9,7 +9,8 @@ var PaymentDetail = require("../models/paymentDetail");
 var Webhook = require("../models/webhook")
 var middleware = require('../config');
 const refer = require('../security/refer');
-
+var nodemailer = require("nodemailer");
+const keys = require('../security/keys');
 
 // Test Routes
 
@@ -73,7 +74,6 @@ router.post('/payment2500-true45454565923dew', (req, res) => {
           EventRegister.findOneAndUpdate({student_id: result.email} ,{$set:{payment : true}}, (err2, result2) => { 
             if(err2)res.send("Error2")
             else{
-              
               res.redirect('/test/tab');
             }
           })
@@ -183,6 +183,72 @@ router.get('/workshop-entry565ferf', (req, res) => {
         res.send("true");
     })
 });
+
+var smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL || keys.admin.email,
+        pass: process.env.PASSWORD  ||keys.admin.password
+    }
+  });
+
+router.get('/emailbulk4FHJds4699', (req, res) => {
+    //anujhooda007@gmail.com
+    var emails = [['raji@instafinancials.com'], ['info@saboori.org'], ['info@taxtellers.com'], ['sanjeev@casaxprt.com'], ['sundeepg93@gmail.com'], ['sandeepnarayan.iitr8@gmail.com'], ['kesavaramd@sanohub.com'], ['sarang.didmishe@flowkraft.co.in'], ['cp.matar@gmail.com'], ['jasminkshaikh@axiafood.com']];
+    app1(emails);
+    res.send("Success");
+});
+
+async function operation(emails) {
+    return new Promise(function(resolve, reject) {
+        var a = 0;
+        var b = 1;
+        a = a + b;
+        a = 5;
+        var i=1;
+
+        emails.forEach(x => {
+            var mailOptions = {
+                bcc: x[0],
+                from: keys.admin.from_email,
+                subject: 'Invitation to Participate in Entrepreneurship Summit IIT BHU',
+                html: "<p>Respected Sir/Maam,</p>" +
+                    "<p>It gives us immense pleasure to announce that the Indian Institute of Technology (Banaras Hindu University) Varanasi is organising <b>The Entrepreneurial festival of IIT(BHU), on the 1st and 2nd of February 2020 in our campus.</b> I would like to describe other opportunities of the summit:<p>"+
+                    "<p style='text-decoration:underline'><b>1.Lonewolf challenge</b></p>"+
+                    "<p>Startups would be pitching to a pool of investors to get investment. We are inviting startups, looking for funding, to register for this event. The investor panel who have been <b>fully confirmed</b> have been attached.</p>"+
+                    "<p style='text-decoration:underline'><b>2. Speed dating an investor on a boat</b></p>"+
+                    "<p>Startups would go on a 10 minute boat ride with the investors/mentors. This would be an informal interaction in which the investor/mentor would provide feedback to the startup at the end of the boat ride.</p>"+
+                    "<p style='text-decoration:underline'><b>3. Startup Expo (E-Carnival)</b></p>"+
+                    "<p>The startups would be showcasing their product/service to the humongous footfall of the entrepreneurship summit. Each startup would be allocated <b>a stall space of 10ft x 10ft.</b> and they are free to <b>distribute their pamphlet</b> to reach out to prospective clients.<b> Investors would also visit the stalls in a particular time slot. 3 startup stalls would also get direct entry to the final round of iB Hubs Startup School.</p></b>"+
+                    "<p style='text-decoration:underline'><b>4. Intern Connect</b></p>"+
+                    "<p>We are inviting startups to share internship openings in their startups which would be listed on our portal. Interviews could be conducted telephonically by the startup. I would request you to share the internship details at the earliest so that we can upload it on the portal. The internships can be remote. All internship would be uploaded free of cost.<b style='text-decoration:underline'> Please reply to this email with your internship opening.</p></b><br>"+
+                    "<p><b>Date : Feb 1,2 2020<b/></p>"+
+                    "<p>Website: <a href='https://esummitiitbhu.com/'> E-Summit'2020</a></p>"+
+                    "<p><b>You need to register on our website by 30th January to participate.</b></p><br>"+
+                    "<p>Please feel free to contact me if you have any queries.</p>"+
+                    "<p style='font-size:18px;'><a href='https://drive.google.com/file/d/1VEuox3KBfzVF7wRQ5pW6Mefu8tKGx_G0/view?usp=sharing'>Click here to see the brochure</a></p>"+
+                    "<p style='font-size:18px;'><a href='https://drive.google.com/file/d/1vmfnSHhaxF7QDGIQw3g_MMhn0n0-8Aar/view?usp=sharing'>Click here to see the investor list</a></p><br>"+
+                    "<p>Thanks and Regards,</p>"+
+                    "<p>Shashwat Agarwal</p>"+
+                    "<p>Startup Assistance Program Head,</p>"+
+                    "<p>E-Cell IIT BHU,</p>"+
+                    "<p>+91-7235046951</p>"
+            };
+            smtpTransport.sendMail(mailOptions, function(err) {
+                if(err)
+                console.log(err + i);
+                else
+                console.log("Yup-" + i);
+                i++;
+            });
+        });
+        resolve(a) // successfully fill promise
+    })
+}
+
+async function app1(emails) {
+    var a = await operation(emails) // a is 5
+}
 
 
 

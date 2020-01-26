@@ -243,8 +243,8 @@
                               <% if(user.startup == false){ %>
                                 <% if(user.registration == false){ %>
                                   <option value="1" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                                  <!-- <option value="2" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                                  -->
+                                  <option value="2" > Student Registration(Banaras Hindu University student's) + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
+                                 
                                 <% } %>
                               <% }else{ %>
                                 <% if(user.registration == false){ %>
@@ -505,8 +505,8 @@
         var amount = parseInt($('#mySelect').val());
         var total = 0;
         if(amount == 1)total= 999;
+        if(amount == 2)total= 799;
         if(amount == 5)total= 2500;
-        
         if(amount == 3){
           total= 999;
           $('.accm, #hrrr').hide();
@@ -527,7 +527,7 @@
         function amountchange() {
           amount = parseInt($('#mySelect').val());
           if(amount == 1)total= 999;
-          if(amount == 3)total= 999;
+          if(amount == 2)total= 799;
           if(amount == 5)total= 2500;
           if(amount == 3){
             total= 999;
