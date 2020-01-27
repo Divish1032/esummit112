@@ -5,6 +5,7 @@ var Event = require("../models/events");
 var Workshop = require("../models/workshop");
 var EventRegister = require("../models/eventRegister");
 var WorkshopRegister = require("../models/workshopRegister");
+var visitorPass = require("../models/visitorsPass")
 var PaymentDetail = require("../models/paymentDetail");
 var Webhook = require("../models/webhook")
 var middleware = require('../config');
@@ -153,8 +154,15 @@ router.get('/user-historygrtja45rhwe5/g5g4erg5egg545eg4njtj', (req, res) => {
     })
 });
 
-router.get('/user-historygrtja45rhwe5/g5g4erg5egg545eg4njtj', (req, res) => {
-    
+router.get('/visitor-historygrtja45rhwe5/g5gKLY56WRE', (req, res) => {
+    visitorPass.find({}, (err, visitor) =>{
+        var result =[];
+        visitor.forEach(x => {
+            var price = x.accomodation ? 500 : 300
+            result.push({name: x.name, email: x.email, phone: x.phone, accomodation: x.accomodation, price : price})
+        });
+        res.send(result);
+    })
 });
 
 // Events Data
