@@ -12,6 +12,10 @@ var middleware = require('../config');
 const refer = require('../security/refer');
 var nodemailer = require("nodemailer");
 const keys = require('../security/keys');
+var Insta = require('instamojo-nodejs');
+Insta.setKeys('56cff578f3406493616ced90f2a855c0', 'acdd9b4a9c93ce7825438d2cd4dc56ef')
+// Insta.setKeys('test_bb088db45573b736d4c98742fff', 'test_ed12af4b6853090ee92b63e564d')
+
 
 // Test Routes
 
@@ -85,29 +89,44 @@ router.post('/payment2500-true45454565923dew', (req, res) => {
 
 
 router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
-    User.find({registration : true}, (err, payment) => {
-        EventRegister.find({ payment : true }, ( err2, eventPayment) => {
-            WorkshopRegister.find({ payment : true}, (err3, workshopPayment) => {
-                var result = [];
-                payment.forEach(x => {
-                    var arr1 = [];
-                    var arr2 = [];
-                    eventPayment.forEach(y => {
-                        if( x.email == y.student_id){
-                            arr1.push(y.name);
-                        }
+
+    Insta.getAllPaymentRequests(function(error, response) {
+        if (error) {
+          res.send(error)
+        } else {
+          User.find({registration : true}, (err, payment) => {
+            EventRegister.find({ payment : true }, ( err2, eventPayment) => {
+                WorkshopRegister.find({ payment : true}, (err3, workshopPayment) => {
+                    var result = [];
+                    payment.forEach(x => {
+                        var arr1 = [];
+                        var arr2 = [];
+                        var price;
+                        eventPayment.forEach(y => {
+                            if( x.email == y.student_id){
+                                arr1.push(y.name);
+                            }
+                        });
+                        workshopPayment.forEach(z => {
+                            if( x.email == z.email){
+                                arr2.push(z.workshop_name);
+                            }
+                        });
+                        response.payment_requests.forEach(p => {
+                            if(p.status == "Completed" && x.email == p.email){
+                                price = p.amount;
+                            }
+                        });
+                        result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, city : x.city, email : x.email, college : x.college, startup : x.startup, accomodation : x.accomodation, events : arr1, workshops : arr2, amount : price});
                     });
-                    workshopPayment.forEach(z => {
-                        if( x.email == z.email){
-                            arr2.push(z.workshop_name);
-                        }
-                    });
-                    result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, city : x.city, email : x.email, college : x.college, startup : x.startup, accomodation : x.accomodation, events : arr1, workshops : arr2});
-                });
-                res.send(result);
+                    
+                    res.send(result);
+                })
             })
         })
-    })
+        }
+      });
+    
 });
 
 // Workshop Data
