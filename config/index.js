@@ -13,7 +13,7 @@ middlewareObj.forwardAuthenticated = function(req, res, next) {
   if (!req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/dashboard');      
+  res.redirect('/dashboard?type=profile');      
 }
 
 middlewareObj.checkEmailVerification = function(req, res, next){
@@ -31,7 +31,7 @@ middlewareObj.checkEmailVerification = function(req, res, next){
         'Email is already verified'
       );
       
-      res.redirect("/dashboard"); 
+      res.redirect("/dashboard?type=profile"); 
     }
       // Redirect to the previous page
      //res.send("You need to be logged in to edit the campground");
