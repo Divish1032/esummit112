@@ -76,7 +76,7 @@ router.post('/payment2500-true45454565923dew', (req, res) => {
     User.findOneAndUpdate({esummit_id : req.body.id}, {$set:{registration : true}}, (err, result) =>{
         if(err)res.send("Error");
         else{
-          EventRegister.findOneAndUpdate({student_id: result.email} ,{$set:{payment : true}}, (err2, result2) => { 
+          EventRegister.updateMany({student_id: result.email} ,{$set:{payment : true}}, (err2, result2) => { 
             if(err2)res.send("Error2")
             else{
               res.redirect('/test/tab');
@@ -119,7 +119,17 @@ router.get('/payment-history-7887878/fefr96FthrtLK54DMsfe878', (req, res) => {
                         });
                         result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, city : x.city, email : x.email, college : x.college, startup : x.startup, accomodation : x.accomodation, events : arr1, workshops : arr2, amount : price});
                     });
-                    
+                    var i=0;
+                    response.payment_requests.forEach(p => {
+                        payment.forEach(x => {
+
+                            if(p.status == "Completed" && x.email == p.email){
+                                i++;
+                                price = p.amount;
+                            }
+                        });
+                    });
+                    console.log(i)
                     res.send(result);
                 })
             })

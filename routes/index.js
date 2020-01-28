@@ -191,7 +191,7 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
               User.findOneAndUpdate({email : email}, {$set:{registration : true}}, (err, reuslt) =>{
                 if(err)res.send("Error");
                 else{
-                  EventRegister.findOneAndUpdate({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
+                  EventRegister.updateMany({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
                     if(err2)res.send("Error2")
                     else{
                       req.flash('success_msg','Payment Success for E-Carnival');
