@@ -688,16 +688,16 @@ router.post('/register', (req, res) => {
                       esummit_id = "ES-" + esummit_id;                  
                       var newUser = new User({ first_name, last_name, email, password, phone, college, city, referal_from,  startup, esummit_id});
                       bcrypt.genSalt(10, (err, salt) => {
-                      bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
-                        newUser.save().then(user => {
-                          req.flash('success_msg','You are now registered and can log in');
-                          res.redirect('/login');
-                          })
-                          .catch(err => console.log(err));
-                      })    
-                    })
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                          if (err) throw err;
+                          newUser.password = hash;
+                          newUser.save().then(user => {
+                            req.flash('success_msg','You are now registered and can log in');
+                            res.redirect('/login');
+                            })
+                            .catch(err => console.log(err));
+                        })    
+                      })
                     })
                     
                   }
