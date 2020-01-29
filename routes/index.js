@@ -78,21 +78,6 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
     visit = true;
     instaPayment(total, req, res, visit)
   }
-  else if(amount == 5){
-    total= 2500;
-    EventRegister.find({student_id: req.user.email, name: "E-Carnival"}, (errr, evt) =>{
-      if(errr)res.send(errr);
-      else{
-        if(evt.length !=0){
-          instaPayment(total, req, res, visit)
-        }
-        else{
-          req.flash('error_msg', "You have not participated in E-Carnival yet.");
-          res.redirect('/dashboard?type=startup');
-        }
-      }
-    });
-  }
   else if(amount == 6){
     total= 500;
     visit = true;
@@ -195,20 +180,6 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
                           res.redirect('/dashboard-participate');
                         }
                       })
-                    }
-                  })
-                }
-              });
-            }
-            else if(amount == 2500){
-              User.findOneAndUpdate({email : email}, {$set:{registration : true}}, (err, reuslt) =>{
-                if(err)res.send("Error");
-                else{
-                  EventRegister.updateMany({student_id: email} ,{$set:{payment : true}}, (err2, result2) => { 
-                    if(err2)res.send("Error2")
-                    else{
-                      req.flash('success_msg','Payment Success for E-Carnival');
-                      res.redirect('/dashboard-participate');
                     }
                   })
                 }
