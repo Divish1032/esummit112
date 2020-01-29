@@ -44,8 +44,21 @@ router.get('/', (req,res) => {
 
 // Payment
 router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
-
-  res.render('payment', {user: req.user});
+  var visitor = false;
+  visitorPass.find({}, (error, visitors) => {
+    if(error)res.send(error);
+    else{
+      console.log(visitors)
+      visitors.forEach(x => {
+        if(x.email == req.user.email){
+          console.log("yes")
+          visitor = true;
+        }
+      });
+      res.render('payment', {user: req.user, visitor: visitor});
+    }
+  });
+  
 })
 
 router.post('/payment', middleware.ensureAuthenticated, (req, res) => {

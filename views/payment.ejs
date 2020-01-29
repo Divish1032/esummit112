@@ -229,6 +229,7 @@
                     </div>
                     
                     <div class="container-fluid">
+                      <% if(visitor == false){ %>
                       <form action="/payment?type=payment" method="post">
                         <% if(user.startup == true && user.registration == true){ %>
                         <h4 style="margin-top: 25px;color: #f4b00e;text-decoration: underline;font-size: 20px;">Professional Registration Done.</h4>
@@ -288,8 +289,18 @@
                             </div>
                           </div>
                           <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
-                        </form>
-                        <p style="font-size: 14px;color: #ccb8b8;">* Before paying fees for E-Carnival please check weather you have participated in that event or not.</p>
+                      </form>
+                      <p style="font-size: 14px;color: #ccb8b8;">* Before paying fees for E-Carnival please check weather you have participated in that event or not.</p>
+                      <% }else{ %>
+                      <h5 style="margin-top: 45px;font-size: 25px;text-align: center;color: #d264ec;text-decoration: underline;">Payment has been made for the visitors pass.</h5>
+                      <p style="font-size: 19px;margin: 12px;margin-top: 30px;">Things that are included in the pass are as follows:</p>
+                      <ul style="margin-left: 12px;font-size: 17px;margin-top: 30px;">
+                        <li>You can visit all the Talks of the Speakers comming in E-Summit.</li>
+                        <li>Can attend A Story To Tell - Workshop by Dhruv Sehgal. </li>
+                        <li>Spectate Panel Discussions and Events.</li>
+                        <li>Accomodation will be provided if you have opted for it.</li>
+                      </ul>
+                      <% } %>
                     </div>
                 </div>
             </div>
