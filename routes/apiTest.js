@@ -212,6 +212,23 @@ router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, r
 });
 
 
+// Events Data
+router.get('/eventregistertrue-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, res) => {
+    User.find({}, (err, user) => {
+        EventRegister.find({payment : true}, (err3, event) => {
+            var result = [];
+            user.forEach(x => {
+                event.forEach(y => {
+                    if( x.email == y.student_id){
+                        result.push({ ESummit_ID : x.esummit_id, name : x.first_name + " " + x.last_name, phone : x.phone, email : x.email, event : y.name, team_name: y.team_name, payment: y.payment});
+                    }
+                });
+            });
+            res.send(result);
+        })
+    })
+});
+
 router.get('/workshop-deletehgj54/36nfgGHHg', (req, res) => {
     WorkshopRegister.deleteMany({workshop_id : "5dfd36336dea263d7cec0444"}, (err3, workshop) => {
         res.send("success")
