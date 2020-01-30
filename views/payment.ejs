@@ -241,17 +241,7 @@
                           <div class="form-group" style="margin-top: 50px;">
                             <label for="exampleInputEmail1">Payment Options</label>
                             <select class="form-control" id="mySelect" onchange="amountchange()" name="amount">
-                              <% if(user.startup == false){ %>
-                                <% if(user.registration == false){ %>
-                                  <option value="1" > Student Registration + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                                  <option value="2" > Student Registration(Banaras Hindu University student's) + Two Workshops(Blockchain & Story To Tell) + Participation kit & T-Shirt + All Student Events</option>
-                                 
-                                <% } %>
-                              <% }else{ %>
-                                <% if(user.registration == false){ %>
-                                  <option value="3" > Professional Registration for Startup Personnel (Incubate me + Speed Dating)</option>
-                                <% } %>
-                              <% } %>
+                    
                               <option value="6" > Visitors Pass + Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
                               <option value="7" > Visitors Pass  + Without Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
                               
@@ -289,7 +279,7 @@
                           </div>
                           <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
                       </form>
-                      <p style="font-size: 14px;color: #ccb8b8;">* Registrations for E-Carnival are closed.</p>
+                      <p style="font-size: 14px;color: #ccb8b8;">* Slots are full and all the registrations are closed. Only visitor's pass allocations are allowed. !!!</p>
                       <% }else{ %>
                       <h5 style="margin-top: 45px;font-size: 25px;text-align: center;color: #d264ec;text-decoration: underline;">Payment has been made for the visitors pass.</h5>
                       <p style="font-size: 19px;margin: 12px;margin-top: 30px;">Things that are included in the pass are as follows:</p>
@@ -514,13 +504,8 @@
       <script>
         var amount = parseInt($('#mySelect').val());
         var total = 0;
-        if(amount == 1)total= 999;
-        if(amount == 2)total= 799;
-        if(amount == 3){
-          total= 999;
-          $('.accm, #hrrr').hide();
-        }
-        else if(amount == 6){
+        
+        if(amount == 6){
           total= 500;
           $('.accm, #hrrr').hide();
         }
@@ -532,16 +517,9 @@
           $('.accm, #hrrr').show();
         }
         $('.tt').text(total)
-        console.log(amount);
         function amountchange() {
           amount = parseInt($('#mySelect').val());
-          if(amount == 1)total= 999;
-          if(amount == 2)total= 799;
-          if(amount == 3){
-            total= 999;
-            $('.accm, #hrrr').hide();
-          }
-          else if(amount == 6){
+          if(amount == 6){
             total= 500;
             $('.accm, #hrrr').hide();
           }

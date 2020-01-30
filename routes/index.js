@@ -63,20 +63,8 @@ router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
   var amount = parseInt(req.body.amount);
   var total = 0;
   var visit = false;
-  if(amount == 1){
-    total= 999;
-    instaPayment(total, req, res, visit)
-  }
-  else if(amount == 2){
-    total= 799;
-    instaPayment(total, req, res, visit)
-  }
-  else if(amount == 3){
-    total= 999;
-    visit = true;
-    instaPayment(total, req, res, visit)
-  }
-  else if(amount == 6){
+
+  if(amount == 6){
     total= 500;
     visit = true;
     instaPayment(total, req, res, visit)
@@ -163,26 +151,8 @@ router.get('/pay789456', middleware.ensureAuthenticated, (req, res)=>{
           } 
           else {
             var amount = parseInt(body.payment_request.payment.unit_price);
-            if(amount == 999 || amount == 799){
-              User.findOneAndUpdate({email : email}, {$set:{registration : true}}, (err, reuslt) =>{
-                if(err)res.send("Error");
-                else{
-                  EventRegister.updateMany({student_id: email, payment: false, name: { $ne: "E-Carnival" }} ,{$set:{payment : true}}, (err2, result2) => { 
-                    if(err2)res.send("Error2")
-                    else{
-                      WorkshopRegister.updateMany({email: email, payment: false, workshop_id: { $ne: "5dfd36336dea263d7cec0444" }} ,{$set:{payment : true}}, (err3, event3) => { 
-                        if(err3)res.send("Error3")
-                        else{
-                          req.flash('success_msg','Payment Success for registration');
-                          res.redirect('/dashboard-participate');
-                        }
-                      })
-                    }
-                  })
-                }
-              });
-            }
-            else if(amount == 500){
+            
+            if(amount == 500){
               var newVisitorPass = new visitorPass({ name, email, phone, payment_id, payment_request_id, status, accomodation: true});
               newVisitorPass.save((err, rest)=>{
                 if(err)res.send(err)
