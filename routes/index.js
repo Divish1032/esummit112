@@ -48,10 +48,8 @@ router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
   visitorPass.find({}, (error, visitors) => {
     if(error)res.send(error);
     else{
-      console.log(visitors)
       visitors.forEach(x => {
         if(x.email == req.user.email){
-          console.log("yes")
           visitor = true;
         }
       });
@@ -125,7 +123,6 @@ function instaPayment(total, req, res, visit) {
         }
       }
       else{  
-        console.log(visit)
         if(!visit){
           User.findOneAndUpdate({email: req.user.email}, {$set:{ accomodation : req.body.accomodation}}, (err, result)=>{
             if(err)res.send(err);
