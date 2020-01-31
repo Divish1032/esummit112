@@ -198,6 +198,7 @@ router.get('/visitor-historygrtja45rhwe5/g5gKLY56WRE', (req, res) => {
 router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, res) => {
     User.find({}, (err, user) => {
         EventRegister.find({}, (err3, event) => {
+            console.log(event.length)
             var result = [];
             user.forEach(x => {
                 event.forEach(y => {
@@ -206,6 +207,7 @@ router.get('/eventregister-history-frukLppPw86CVnnbN/test546s6dDGHJWSx', (req, r
                     }
                 });
             });
+            console.log(result.length)
             res.send(result);
         })
     })

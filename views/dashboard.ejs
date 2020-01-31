@@ -163,6 +163,12 @@
               <p>Alternate Accommodation</p>
             </a>
           </li>
+          <li class="nav-item campus-panel">
+            <a class="nav-link" href="/dashboard?type=place">
+              <i class="material-icons">place</i>
+              <p>Important Places</p>
+            </a>
+          </li>
           <li class="nav-item contact-panel">
             <a class="nav-link" href="/dashboard?type=contact">
               <i class="material-icons">contacts</i>
@@ -535,6 +541,45 @@
       </div>
     </div>
     <% } %>
+
+    <% if(type == "place"){ %>
+      <div class="content pricing">
+        <div class="card" style="padding-bottom: 50px;">
+          <div class="card-header card-header-primary">
+              <h4 class="card-title">Highlighted Places(Varanasi)</h4>
+          </div>
+          <div class="container-fluid">
+            <div class="card-body">
+                <h5 style="color: white;font-size: 19px;text-decoration: underline;">E-Summit'20 related places:</h5>
+                               
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <th style="color: white;font-size: 19px;">Place Name</th>
+                            <th style="color: white;font-size: 19px;">Google Map Location:</th>
+                        </thead>
+                        <tbody class="pric">
+                          <tr>
+                              <td>
+                                  <h5>All events and accomodation related places</h5>
+                              </td>
+                              <td class="event_date">
+                                  <a href="https://goo.gl/maps/W558XM6RWrWtq5nq7">Click Here</a>
+                              </td>
+                          </tr>
+  
+                          
+                         
+          
+                      
+                          </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
 
 
     <% if(type == "campus"){ %>
