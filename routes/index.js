@@ -44,22 +44,12 @@ router.get('/', (req,res) => {
 
 // Payment
 router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
-  var visitor = false;
-  visitorPass.find({}, (error, visitors) => {
-    if(error)res.send(error);
-    else{
-      visitors.forEach(x => {
-        if(x.email == req.user.email){
-          visitor = true;
-        }
-      });
-      res.render('payment', {user: req.user, visitor: visitor});
-    }
-  });
+  
+      res.render('payment', {user: req.user});
   
 })
 
-router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
+/* router.post('/payment', middleware.ensureAuthenticated, (req, res) => {
   var amount = parseInt(req.body.amount);
   var total = 0;
   var visit = false;
@@ -214,7 +204,7 @@ router.post('/payment-webhook-14567899', (req, res) => {
       }
     })
   }
-})
+}) */
 
 // Dashboard
 

@@ -235,67 +235,7 @@
                     </div>
                     
                     <div class="container-fluid">
-                      <% if(visitor == false){ %>
-                      <form action="/payment?type=payment" method="post">
-                        <% if(user.startup == true && user.registration == true){ %>
-                        <h4 style="margin-top: 25px;color: #f4b00e;text-decoration: underline;font-size: 20px;">Professional Registration Done.</h4>
-                        <% }else if(user.startup == false && user.registration == true){ %>
-                          <h4 style="margin-top: 25px;color: #f4b00e;text-decoration: underline;font-size: 20px;">Student Registration Done.</h4>
-                        <% } %>
-
-                        <h5 style="margin-top: 60px;text-align: center;font-size: 20px;font-weight: bold;text-decoration: underline;color: #959191;">Registration</h5>
-                          <div class="form-group" style="margin-top: 50px;">
-                            <label for="exampleInputEmail1">Payment Options</label>
-                            <select class="form-control" id="mySelect" onchange="amountchange()" name="amount">
-                    
-                              <option value="6" > Visitors Pass + Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
-                              <option value="7" > Visitors Pass  + Without Accomodation (includes all talks + A Story To Tell Workshop + Spectate Panel Discussion &amp; Events)</option>
-                              
-                            </select>
-                            <i class="fa fa-caret-down" style="float: right;color:white;font-size: 30px;position: relative;top: -35px;"></i>
-                          </div>
-                          <div class="row accm" style="margin-top: 40px;margin-bottom: 40px;">
-                            <div class="col-sm-4">With Accomodation?</div>
-                            <div class="col-sm-8">
-                              <div class="form-check" style="    width: 50%;float: left;">
-                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;" type="radio" name="accomodation" id="exampleRadios1" value="yes" required checked>
-                                  <label class="form-check-label" for="exampleRadios1">
-                                    Yes
-                                  </label>
-                              </div>
-                              <div class="form-check" style="    width: 50%;float: left;">
-                                  <input  class="form-check-input" class="rad" style="position: relative;top: 2px;opacity: 1;z-index: 9;height: max-content;width: max-content;"  type="radio" name="accomodation" id="exampleRadios2" value="no" required>
-                                  <label class="form-check-label" for="exampleRadios2">
-                                    No 
-                                  </label>
-                              </div>
-                            </div>
-                          </div>
-                           
-                          <hr id="hrrr" style="background-color: white;width: 75%;margin: 17px 0;">
-                          <div class="row" style="font-size: 19px;color: #AAA;margin-top: 50px;">
-                            <div class="col-6">
-                              <p>Total : </p>
-                            </div>
-                            <div class="col-6">
-                              <p  style="color: white;font-size: 15px;position: relative;left: 20px;font-weight: bold;">
-                                Rs. <span class="tt"></span>
-                              </p>
-                            </div>
-                          </div>
-                          <button class="btn btn-outline-warning" style="margin-top: 30px;" type="submit">Pay</button>
-                      </form>
-                      <p style="font-size: 14px;color: #ccb8b8;">* Slots are full and all the registrations are closed. Only visitor's pass allocations are allowed. !!!</p>
-                      <% }else{ %>
-                      <h5 style="margin-top: 45px;font-size: 25px;text-align: center;color: #d264ec;text-decoration: underline;">Payment has been made for the visitors pass.</h5>
-                      <p style="font-size: 19px;margin: 12px;margin-top: 30px;">Things that are included in the pass are as follows:</p>
-                      <ul style="margin-left: 12px;font-size: 17px;margin-top: 30px;">
-                        <li>You can visit all the Talks of the Speakers comming in E-Summit.</li>
-                        <li>Can attend A Story To Tell - Workshop by Dhruv Sehgal. </li>
-                        <li>Spectate Panel Discussions and Events.</li>
-                        <li>Accomodation will be provided if you have opted for it.</li>
-                      </ul>
-                      <% } %>
+                      <p>All payment closed</p>
                     </div>
                 </div>
             </div>
@@ -507,38 +447,7 @@
     
         });
       </script>
-      <script>
-        var amount = parseInt($('#mySelect').val());
-        var total = 0;
-        
-        if(amount == 6){
-          total= 500;
-          $('.accm, #hrrr').hide();
-        }
-        else if(amount == 7){
-          total= 300;
-          $('.accm, #hrrr').hide();
-        }
-        else{
-          $('.accm, #hrrr').show();
-        }
-        $('.tt').text(total)
-        function amountchange() {
-          amount = parseInt($('#mySelect').val());
-          if(amount == 6){
-            total= 500;
-            $('.accm, #hrrr').hide();
-          }
-          else if(amount == 7){
-            total= 300;
-            $('.accm, #hrrr').hide();
-          }
-          else{
-            $('.accm, #hrrr').show();
-          }
-          $('.tt').text(total);
-        }
-      </script>
+      
       
     </body>
     
