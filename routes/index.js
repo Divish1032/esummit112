@@ -44,9 +44,7 @@ router.get('/', (req,res) => {
 
 // Payment
 router.get('/payment', middleware.ensureAuthenticated, (req, res) => {
-  
-      res.render('payment', {user: req.user});
-  
+  res.render('payment', {user: req.user});
 })
 
 // Dashboard
@@ -319,15 +317,15 @@ router.get('/dashboard/discard-event/:team_name/:name', middleware.ensureAuthent
 
 // Authentication
 
-/* router.get('/register', middleware.forwardAuthenticated, (req,res) => {
+ router.get('/register', middleware.forwardAuthenticated, (req,res) => {
   res.render("register");
-}); */
+}); 
 
 router.get('/login', middleware.forwardAuthenticated, (req,res) => {
   res.render("login");
 });
 
-/* router.get('/send', middleware.checkEmailVerification, middleware.ensureAuthenticated, (req, res) => {
+ router.get('/send', middleware.checkEmailVerification, middleware.ensureAuthenticated, (req, res) => {
   rand=Math.floor((Math.random() * 100000) + 54);
   link="https://"+req.get('host')+"/verify?id="+rand+"&email="+req.user.email;
   arr = []
@@ -409,9 +407,9 @@ router.get('/verify', function(req,res){
    }
  
  })
-}); */
+}); 
 
-/* router.post('/register', (req, res) => {
+ router.post('/register', (req, res) => {
     const first_name = req.body.first_name;
     const last_name = req.body.last_name
     const email = req.body.email;
@@ -511,7 +509,7 @@ router.get('/verify', function(req,res){
         })
       }
     }
-  }); */
+  }); 
 
 router.post('/referal-submit', (req, res) => {
   var code = req.body.code;
